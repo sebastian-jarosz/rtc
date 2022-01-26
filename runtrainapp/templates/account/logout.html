@@ -1,0 +1,22 @@
+{% extends 'base_template.html' %}
+
+{% block title %}
+Sign Out - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <h1>Sign Out</br>Are you sure you want to sign out?</h1>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+    <button type="submit">Sign Out</button>
+  </form>
+</div>
+
+{% endblock body_data %}
+

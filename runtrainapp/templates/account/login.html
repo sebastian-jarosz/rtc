@@ -1,0 +1,59 @@
+{% extends 'base_template.html' %}
+
+{% load account socialaccount %}
+
+{% block title %}
+Login - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <h1>Sign In</h1>
+</div>
+
+
+  {% get_providers as socialaccount_providers %}
+
+  <!-- If we have available providers -->
+  {% if socialaccount_providers %}
+    <div class="page-hero d-flex align-items-center justify-content-center">
+
+      <p>Please sign in with one
+      of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+      for a {{ site_name }} account and sign in below:</p>
+    </div>
+
+    <!-- List of available providers -->
+    <div class="page-hero d-flex align-items-center justify-content-center">
+      <div class="socialaccount_ballot">
+        <ul class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </ul>
+      </div>
+    </div>
+
+  <!-- If no providers -->
+  {% else %}
+    <div class="page-hero d-flex align-items-center justify-content-center">
+      <p>If you have not created an account yet, then please
+      <a href="{{ signup_url }}">sign up</a> first.</p>
+    </div>
+  {% endif %}
+
+</div>
+
+<!-- Login form -->
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <form class="login" method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    <!--as_p - will render them wrapped in <p> tags-->
+    {{ form.as_p }}
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <a class="button secondaryAction" href="{% url 'account_reset_password' %}">Forgot Password?</a>
+    <button class="primaryAction" type="submit">Sign In</button>
+  </form>
+</div>
+
+{% endblock body_data %}

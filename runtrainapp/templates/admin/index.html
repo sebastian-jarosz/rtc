@@ -1,0 +1,17 @@
+{% extends 'base_template.html' %}
+
+{% block title %}
+Welcome - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+
+<div class="page-hero d-flex align-items-center justify-content-center">
+    {% if user.is_authenticated %}
+        <h1>Hello, {{ user.username }}! </br> Welcome in Running Traning App</h1>
+    {% else %}
+        <h1>Hello, new user. Please log in.</br> Welcome in Running Traning App</h1>
+    {% endif %}
+</div>
+
+{% endblock body_data %}

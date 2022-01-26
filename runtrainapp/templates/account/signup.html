@@ -1,0 +1,34 @@
+{% extends 'base_template.html' %}
+
+
+{% block title %}
+Sign Up - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <h1>Sign Up</h1>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+</div>
+
+<!-- Sign Up form -->
+<div class="page-hero d-flex align-items-center justify-content-center">
+  <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+    <!--as_p - will render them wrapped in <p> tags-->
+    {{ form.as_p }}
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+  <button type="submit">Sign Up &raquo;</button>
+</form>
+</div>
+
+{% endblock body_data %}
+
+{% block content %}
+
+
+{% endblock %}
