@@ -9,12 +9,48 @@ def get_training_type_by_id(type_id):
     return TrainingType.objects.get(id=type_id)
 
 
+def get_training_type_by_description(description):
+    return TrainingType.objects.get(description=description)
+
+
 def get_running_training_type_by_id(type_id):
     return RunningTrainingType.objects.get(id=type_id)
 
 
 def get_trainings_amount_by_provider_and_user(provider, user):
     return Training.objects.filter(user=user, provider=provider).count()
+
+
+def get_one_km_timing_by_description(description):
+    return OneKmTiming.objects.get(description=description)
+
+
+def get_five_km_timing_by_description(description):
+    return FiveKmTiming.objects.get(description=description)
+
+
+def get_ten_km_timing_by_description(description):
+    return TenKmTiming.objects.get(description=description)
+
+
+def get_half_marathon_timing_by_description(description):
+    return HalfMarathonTiming.objects.get(description=description)
+
+
+def get_marathon_timing_by_description(description):
+    return MarathonTiming.objects.get(description=description)
+
+
+def get_training_timing_by_description(description):
+    return TrainingTiming.objects.get(description=description)
+
+
+def get_wellness_type_by_description(description):
+    return WellnessType.objects.get(description=description)
+
+
+def get_warmup_frequency_by_description(description):
+    return WarmupFrequency.objects.get(description=description)
 
 
 # Create Training object and save into DB or return existing object
