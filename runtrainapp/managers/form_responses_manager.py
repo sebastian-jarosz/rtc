@@ -1,13 +1,15 @@
-import csv
+import pandas as pd
+
+from runtrainapp.utils.form_parser import *
 
 
 def process_csv(path):
-    with open('Ankieta dla biegaczy.csv') as csv_responses_file:
-        csv_reader = csv.reader(csv_responses_file, delimiter=',')
-        line_count = 0
-        for row in csv_responses_file:
-            if line_count == 0:
-                print(f'Column names are {", ".join(row)}')
-                line_count += 1
-            else:
-                print(row)
+    df = pd.read_csv('Ankieta dla biegaczy.csv')
+
+    # Replace nan values with None
+    formatted_df = df.where(pd.notnull(df), None)
+
+    for i, row in formatted_df.iterrows():
+        data = parse_response_row(row)
+        create_form_response_and_related_data_by_dict(data)
+
