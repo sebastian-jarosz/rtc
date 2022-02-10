@@ -59,6 +59,10 @@ def get_warmup_frequency_by_description(description):
     return WarmupFrequency.objects.get(description=description)
 
 
+def get_all_form_responses():
+    return FormResponse.objects.all()
+
+
 # Create Training object and save into DB or return existing object
 def create_training(user, provider, training_type, start_date, elapsed_time, external_code):
     obj, created = Training.objects.get_or_create(
