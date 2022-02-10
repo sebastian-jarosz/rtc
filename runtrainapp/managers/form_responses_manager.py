@@ -13,3 +13,14 @@ def process_csv(path):
         data = parse_response_row(row)
         create_form_response_and_related_data_by_dict(data)
 
+
+def produce_csv(path):
+    form_responses = get_all_form_responses()
+
+    df = pd.DataFrame(list(form_responses.values()))
+
+    # Convert values from bool to int
+    df['other_trainings'] = df['other_trainings'].astype(int)
+    df['wellness'] = df['wellness'].astype(int)
+
+    df.to_csv('Mapped - Ankieta dla biegaczy.csv')
