@@ -6,7 +6,9 @@ from runtrainapp import views
 urlpatterns = [
     path('', views.index, name="index"),
     path('admin/', admin.site.urls),
-    path('admin/parse', views.parse_responses, name='admin parse responses'),
+    path('admin/form_management/', views.form_management, name='form management'),
+    path('admin/api/parse/', views.parse_responses, name='admin parse responses'),
+    path('admin/api/read/', views.write_responses, name='admin write responses'),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.profile, name="account_profile"),
     path('training/', views.list_all_trainings, name="all trainings"),

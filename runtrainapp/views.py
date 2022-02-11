@@ -1,11 +1,13 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
+from runtrainapp.managers.form_responses_manager import *
 from runtrainapp.tables import *
 
 
 def index(request):
-    return render(request, 'admin/index.html')
+    return render(request, 'index.html')
 
 
 def page_not_found(request, exception):
@@ -78,5 +80,19 @@ def list_all_user_running_trainings(request):
     return render(request, 'training/list_running_training.html', context)
 
 
+def form_management(request):
+    form_responses_count = get_all_form_responses_count()
+    context = {
+        'form_responses_count': form_responses_count
+    }
+    return render(request, 'admin/form_management.html', context)
+
+
 def parse_responses(request):
-    return render(request, 'admin/index.html')
+    process_csv(None)
+    return HttpResponse("parse_responses invoked")
+
+
+def write_responses(request):
+    produce_csv(None)
+    return HttpResponse("parse_responses invoked")
