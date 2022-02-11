@@ -4,13 +4,13 @@ import os
 from runtrainapp.utils.form_parser import *
 
 
-def process_csv(path=None):
-    if path is None:
+def process_csv(file=None):
+    if file is None:
         current_path = os.getcwd()
         # Default path
-        path = current_path + '/form_data/Ankieta dla biegaczy.csv'
+        file = current_path + '/form_data/Ankieta dla biegaczy.csv'
 
-    df = pd.read_csv(path)
+    df = pd.read_csv(file)
 
     # Replace nan values with None
     formatted_df = df.where(pd.notnull(df), None)

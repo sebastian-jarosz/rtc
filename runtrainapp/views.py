@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
@@ -89,7 +91,10 @@ def form_management(request):
 
 
 def parse_responses(request):
-    process_csv(None)
+    if request.method == 'POST':
+        responses_file = request.FILES.get('files')
+        process_csv(responses_file)
+
     return HttpResponse("parse_responses invoked")
 
 
