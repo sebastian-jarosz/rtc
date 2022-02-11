@@ -63,6 +63,10 @@ def get_all_form_responses():
     return FormResponse.objects.all()
 
 
+def get_all_form_responses_count():
+    return FormResponse.objects.count()
+
+
 # Create Training object and save into DB or return existing object
 def create_training(user, provider, training_type, start_date, elapsed_time, external_code):
     obj, created = Training.objects.get_or_create(
@@ -152,6 +156,11 @@ def create_form_response_by_dict(data_dict):
         warmup_time=data_dict[INDEX_WARMUP_TIME]
     )
 
+    if created:
+        print("FormResponseID:  %s\t- CREATED" % obj.id)
+    else:
+        print("FormResponseID:  %s\t- EXIST" % obj.id)
+
     return obj
 
 
@@ -172,6 +181,11 @@ def create_response_other_training(form_response, other_training):
         other_training_type=other_training
     )
 
+    if created:
+        print("ResponseOtherTraining:  %s\t- CREATED" % obj.id)
+    else:
+        print("ResponseOtherTraining:  %s\t- EXIST" % obj.id)
+
     return obj
 
 
@@ -191,5 +205,10 @@ def create_response_wellness(form_response, wellness_type):
         response=form_response,
         wellness_type=wellness_type
     )
+
+    if created:
+        print("ResponseWellness:  %s\t- CREATED" % obj.id)
+    else:
+        print("ResponseWellness:  %s\t- EXIST" % obj.id)
 
     return obj
