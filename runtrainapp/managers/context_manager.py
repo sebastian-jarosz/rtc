@@ -22,6 +22,8 @@ def create_response_context(*args):
             add_table_to_context(arg, context)
         elif isinstance(arg, Training):
             add_training_to_context(arg, context)
+        elif isinstance(arg, FormResponse):
+            add_form_response_to_context(arg, context)
 
     return context
 
@@ -44,3 +46,8 @@ def add_table_to_context(table, context):
 # Add Training to the context
 def add_training_to_context(training, context):
     context[CONTEXT_TRAINING] = training
+
+
+# Add Form Response to the context
+def add_form_response_to_context(training, context):
+    context[CONTEXT_FORM_RESPONSE] = training
