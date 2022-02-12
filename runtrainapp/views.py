@@ -119,3 +119,11 @@ def parse_responses(request):
 def write_responses(request):
     produce_csv(None)
     return HttpResponse("parse_responses invoked")
+
+
+def learn_management(request):
+    form_responses_count = get_all_form_responses_count()
+    context = {
+        'form_responses_count': form_responses_count
+    }
+    return render(request, 'admin/learn_management.html')
