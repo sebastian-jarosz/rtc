@@ -198,6 +198,10 @@ class FormResponse(models.Model):
     # Jaki jest średni czas trwania rozgrzewki? (w minutach)
     warmup_time = models.IntegerField()
 
+    def __str__(self):
+        return "Form Response %i\t- Year of Birth: %i\t Height: %i\t Weight: %i\t Running Years: %i" % \
+               (self.id, self.year_of_birth, self.height, self.weight, self.running_years)
+
 
 class ResponseOtherTraining(models.Model):
     response = models.ForeignKey(FormResponse, on_delete=models.CASCADE)

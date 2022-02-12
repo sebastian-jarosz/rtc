@@ -1,4 +1,6 @@
 import django_tables2 as tables
+from django_tables2 import A
+
 from .models import *
 
 
@@ -25,4 +27,13 @@ class RunningTrainingTable(tables.Table):
 
     class Meta:
         model = RunningTraining
+        template_name = "tables/responsive-table.html"
+
+
+class FormResponsesTable(tables.Table):
+    response = tables.TemplateColumn('{{ record }}', order_by="id")
+    show_details = tables.LinkColumn('response', args=[A('id')], order_by="id", text='Show details')
+
+    class Meta:
+        sequence = ('response', 'show_details')
         template_name = "tables/responsive-table.html"

@@ -90,6 +90,24 @@ def form_management(request):
     return render(request, 'admin/form_management.html', context)
 
 
+def form_responses(request):
+    all_form_responses = get_all_form_responses()
+    form_responses_table = FormResponsesTable(all_form_responses)
+
+    configure_table(request, form_responses_table)
+    context = create_response_context(form_responses_table)
+
+    return render(request, 'admin/list_form_response.html', context)
+
+
+def response(request, form_response_id):
+    response_obj = get_object_or_404(FormResponse, pk=form_response_id)
+
+    context = create_response_context(response_obj)
+
+    return render(request, 'admin/form_response.html', context)
+
+
 def parse_responses(request):
     if request.method == 'POST':
         responses_file = request.FILES.get('files')
