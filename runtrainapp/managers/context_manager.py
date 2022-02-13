@@ -30,6 +30,8 @@ def create_response_context(*args):
             add_training_form_to_context(arg, context)
         elif isinstance(arg, AddRunningTrainingForm):
             add_running_training_form_to_context(arg, context)
+        elif isinstance(arg, GenerateTrainingForm):
+            add_generate_training_form_to_context(arg, context)
         elif isinstance(arg, Exception):
             add_general_exception_to_context(arg, context)
 
@@ -74,6 +76,11 @@ def add_training_form_to_context(add_training_form, context):
 # Add Running Training Form to the context
 def add_running_training_form_to_context(add_running_training_form, context):
     context[CONTEXT_ADD_RUNNING_TRAINING_FORM] = add_running_training_form
+
+
+# Add Running Training Form to the context
+def add_generate_training_form_to_context(generate_training_form, context):
+    context[CONTEXT_ADD_GENERATE_TRAINING_FORM] = generate_training_form
 
 
 def add_general_exception_to_context(exception, context):

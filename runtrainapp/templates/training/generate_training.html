@@ -1,0 +1,49 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+Generate Training - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h1>Generate Training</h1>
+</div>
+
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <form action="/training/generator/" method="post" id="generatorForm">
+        {% csrf_token %}
+        {{ generate_training_form|crispy }}
+        <input type="submit" class="btn btn-secondary" value="Generuj propozycje treningu">
+    </form>
+</div>
+
+
+<!-- Success msg -->
+<!--{% if running_training %}-->
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-success alert-dismissible" id="generateTrainingSuccess">
+        <button type="button" class="close">&times;</button>
+        <strong>Udało się!</strong>
+        Wygenerowane propozycje są dostępne tutaj tutaj URL
+    </div>
+</div>
+<!--{% endif %}-->
+
+<!-- Exception msg -->
+{% if exception %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-danger alert-dismissible" id="generateTrainingError">
+        <button type="button" class="close">&times;</button>
+        <strong>Error! Wystąpił problem podczas generowania propozycji</strong>
+        Szczegóły problemu: {{ exception }}
+    </div>
+</div>
+{% endif %}
+{% endblock body_data %}
+
+{% block custom_js %}
+    <script type="text/javascript" src="{% static 'admin/generate_training.js' %}"></script>
+{% endblock custom_js %}

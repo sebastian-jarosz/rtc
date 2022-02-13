@@ -25,6 +25,12 @@ TYPE_MARTIAL_ARTS = 7
 TYPE_RUNNING = 8
 TYPE_OTHER = 9
 
+# Training Timing IDs
+TIMING_9 = 9 # od 00:06:01 do 00:06:30
+TIMING_10 = 10 # od 00:06:31 do 00:07:00
+TIMING_11 = 11  # od 00:06:01 i powyżej
+TIMING_12 = 12  # od 00:07:01 i powyżej
+
 # Running Training Type IDs
 RUNNING_TYPE_NOT_SPECIFIED = 6
 
@@ -37,4 +43,5 @@ CONTEXT_RUNNING_TRAINING = 'running_training'
 CONTEXT_FORM_RESPONSE = 'form_response'
 CONTEXT_ADD_TRAINING_FORM = 'add_training_form'
 CONTEXT_ADD_RUNNING_TRAINING_FORM = 'add_running_training_form'
+CONTEXT_ADD_GENERATE_TRAINING_FORM = 'generate_training_form'
 CONTEXT_EXCEPTION = 'exception'

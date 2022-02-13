@@ -85,6 +85,18 @@ def get_one_km_timing_by_description(description):
     return OneKmTiming.objects.get(description=description)
 
 
+# Get timing descriptions by model
+def get_timing_description_list_by_model(model):
+    all_timings = model.objects.all()
+
+    result = []
+    # Description needed for UI
+    for timing in all_timings:
+        result.append((timing.description, timing.description))
+
+    return result
+
+
 def get_five_km_timing_by_description(description):
     return FiveKmTiming.objects.get(description=description)
 
@@ -105,12 +117,36 @@ def get_training_timing_by_description(description):
     return TrainingTiming.objects.get(description=description)
 
 
+# Get timing descriptions by model
+def get_training_timing_description_list(excluded_ids=[]):
+    all_timings = TrainingTiming.objects.exclude(id__in=excluded_ids)
+
+    result = []
+    # Description needed for UI
+    for timing in all_timings:
+        result.append((timing.description, timing.description))
+
+    return result
+
+
 def get_wellness_type_by_description(description):
     return WellnessType.objects.get(description=description)
 
 
 def get_warmup_frequency_by_description(description):
     return WarmupFrequency.objects.get(description=description)
+
+
+# Get timing descriptions by model
+def get_warmup_frequency_description_list():
+    all_warmup_frequency = WarmupFrequency.objects.all()
+
+    result = []
+    # Description needed for UI
+    for warmup_frequency in all_warmup_frequency:
+        result.append((warmup_frequency.description, warmup_frequency.description))
+
+    return result
 
 
 def get_all_form_responses():
@@ -309,6 +345,49 @@ def parse_running_training_request(request):
     running_training = create_running_training(training, distance, avg_speed, running_training_type, segments=segments_amount)
 
     return running_training
+
+
+def parse_generate_training_request(request):
+    post_request = request.POST
+    # Generate Training - start_date value
+    year_of_birth = int(post_request.get('year_of_birth'))
+    height = int(post_request.get('height'))
+    weight = int(post_request.get('weight'))
+    running_years = int(post_request.get('running_years'))
+    training_amount = int(post_request.get('training_amount'))
+    km_amount = int(post_request.get('km_amount'))
+    speed_training_amount = int(post_request.get('speed_training_amount'))
+    minute_per_km_speed_training_id = get_training_timing_by_description(post_request.get('minute_per_km_speed_training_id'))
+    threshold_training_amount = int(post_request.get('threshold_training_amount'))
+    minute_per_km_threshold_training_id = get_training_timing_by_description(post_request.get('minute_per_km_threshold_training_id'))
+    interval_training_amount = int(post_request.get('interval_training_amount'))
+    minute_per_km_interval_training_id = get_training_timing_by_description(post_request.get('minute_per_km_interval_training_id'))
+    run_up_training_amount = int(post_request.get('run_up_training_amount'))
+    minute_per_km_run_up_training_id = get_training_timing_by_description(post_request.get('minute_per_km_interval_training_id'))
+    runway_amount = int(post_request.get('runway_amount'))
+    km_per_runway = int(post_request.get('km_per_runway'))
+    minute_per_km_runway_id = get_training_timing_by_description(post_request.get('minute_per_km_runway_id'))
+    # other_trainings - Default False
+    other_trainings_str = post_request.get('other_trainings', 'false')
+    if other_trainings_str.lower() == 'false':
+        other_trainings = False
+    else:
+        other_trainings = True
+    other_trainings_amount = int(post_request.get('other_trainings_amount'))
+    other_trainings_time = int(post_request.get('other_trainings_time'))
+    # wellness - Default False
+    wellness_str = post_request.get('other_trainings', 'false')
+    if wellness_str.lower() == 'false':
+        wellness = False
+    else:
+        wellness = True
+    wellness_amount = int(post_request.get('wellness_amount'))
+    detraining_amount = int(post_request.get('detraining_amount'))
+    detraining_days = int(post_request.get('detraining_days'))
+    warmup_id = get_warmup_frequency_by_description(post_request.get('warmup_id'))
+    warmup_time = int(post_request.get('warmup_time'))
+
+    return 'training'
 
 
 def parse_date_time_from_string(date_time_str):
