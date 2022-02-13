@@ -12,6 +12,7 @@ urlpatterns = [
     path('admin/api/parse/', views.parse_responses, name='admin parse responses'),
     path('admin/api/read/', views.write_responses, name='admin write responses'),
     path('admin/learn/management/', views.learn_management, name='learn management'),
+    path('admin/api/teach/', views.teach, name='teach'),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.profile, name="account_profile"),
     path('training/', views.list_all_trainings, name="all trainings"),

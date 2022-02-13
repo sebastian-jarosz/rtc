@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
+from runtrainapp.managers.learn_manager import *
 from runtrainapp.tables import *
 
 
@@ -127,3 +128,15 @@ def learn_management(request):
         'form_responses_count': form_responses_count
     }
     return render(request, 'admin/learn_management.html')
+
+
+def teach(request):
+    if request.method == 'POST':
+        do_not_map_data = request.POST.get('doNotMapData')
+
+        if do_not_map_data == 'false':
+            # Produce CSV mapped file for learning process
+            produce_csv()
+            learn_model()
+
+    return HttpResponse("teach invoked")
