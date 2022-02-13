@@ -1,0 +1,41 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+{% block title %}
+Add training - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h1>Add Running Training</h1>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <form action="/training/add/running/" method="post">
+        {% csrf_token %}
+        {{ add_running_training_form }}
+        <input type="submit" class="btn btn-secondary" value="Dodaj trening">
+    </form>
+</div>
+
+<!-- Success msg -->
+{% if running_training %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-success alert-dismissible" id="addRunningTrainingSuccess">
+        <button type="button" class="close">&times;</button>
+        <strong>Udało się!</strong> Trening biegowy został dodany pod ID: {{ running_training.id }}
+    </div>
+</div>
+{% endif %}
+
+<!-- Exception msg -->
+{% if exception %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-danger alert-dismissible" id="addRunningTrainingError">
+        <button type="button" class="close">&times;</button>
+        <strong>Error! Wystąpił problem podczas zapisu</strong>
+        Szczegóły problemu: {{ exception }}
+    </div>
+</div>
+{% endif %}
+
+{% endblock body_data %}

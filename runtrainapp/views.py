@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-
-from runtrainapp.forms import AddTrainingForm
+from runtrainapp.forms import *
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
@@ -79,6 +78,26 @@ def add_training(request):
     context = create_response_context(*context_args)
 
     return render(request, 'training/add_training.html', context)
+
+
+def add_running_training(request):
+    context_args = []
+    if request.method == 'POST':
+        try:
+            running_training_obj = parse_running_training_request(request)
+            context_args.append(running_training_obj)
+        except Exception as e:
+            # Add exception in case of failure
+            context_args.append(e)
+
+    # If request.method = GET
+    users = get_user_list(request.user, request.user.is_staff)
+    form = AddRunningTrainingForm(users, get_running_training_types_description_list(), request.user.is_staff)
+    context_args.append(form)
+
+    context = create_response_context(*context_args)
+
+    return render(request, 'training/add_running_training.html', context)
 
 
 # List all running trainings

@@ -19,7 +19,7 @@ class CustomAddEmailForm(AddEmailForm):
 
 class AddTrainingForm(forms.Form):
     start_date = forms.DateTimeField(initial=get_current_date_time)
-    training_time = forms.IntegerField(label='Training time (in minutes)')
+    training_time = forms.IntegerField(label='Training time (in minutes)', min_value=1)
     training_type = forms.ChoiceField()
     user = forms.ChoiceField(disabled=True)
 
@@ -32,5 +32,26 @@ class AddTrainingForm(forms.Form):
         if is_admin:
             self['user'].field.disabled = False
 
+
+class AddRunningTrainingForm(forms.Form):
+    # Training part
+    start_date = forms.DateTimeField(initial=get_current_date_time)
+    training_time = forms.IntegerField(label='Training time (in minutes)', min_value=1)
+    user = forms.ChoiceField(disabled=True)
+
+    # Running Training part
+    distance = forms.DecimalField(label='Distance (in meters)', min_value=0.1, decimal_places=2)
+    # Segments - Default value 1
+    segments_amount = forms.IntegerField(label='Segments amount', initial=1, min_value=1)
+    running_training_type = forms.ChoiceField()
+
+    def __init__(self, users, running_training_types, is_admin=False):
+        super().__init__()
+        self['user'].field.choices = users
+        self['running_training_type'].field.choices = running_training_types
+
+        # Enable field for admin
+        if is_admin:
+            self['user'].field.disabled = False
 
 

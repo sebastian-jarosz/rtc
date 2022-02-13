@@ -29,11 +29,27 @@ def get_training_types_description_list(exclude_running=True):
         all_training_types = TrainingType.objects.all()
 
     result = []
+    # Description needed for UI
     for training_type in all_training_types:
         result.append((training_type.description, training_type.description))
 
     return result
 
+
+# Get running training types list
+def get_running_training_types_description_list():
+    all_running_training_types = RunningTrainingType.objects.all()
+
+    result = []
+    # Description needed for UI
+    for training_type in all_running_training_types:
+        result.append((training_type.description, training_type.description))
+
+    return result
+
+
+def get_user_by_username(username):
+    return User.objects.get(username=username)
 
 # Get user list
 # Running excluded by default
@@ -52,6 +68,13 @@ def get_user_list(user_name, is_admin=False):
 
 def get_running_training_type_by_id(type_id):
     return RunningTrainingType.objects.get(id=type_id)
+
+
+def get_running_training_type_by_description(description):
+    try:
+        return RunningTrainingType.objects.get(description=description)
+    except RunningTrainingType.DoesNotExist:
+        return RunningTrainingType.objects.get(id=RUNNING_TYPE_NOT_SPECIFIED)
 
 
 def get_trainings_amount_by_provider_and_user(provider, user):
@@ -248,15 +271,20 @@ def create_response_wellness(form_response, wellness_type):
 
 
 # Parse POST request for training add
-def parse_training_request(request):
+def parse_training_request(request, is_running=False):
     post_request = request.POST
+    # Training - start_date value
     start_date = parse_date_time_from_string(post_request.get('start_date'))
-    # Change training type to seconds (As data from strava)
+    # Training - time value - Change training_time to seconds (DB data consistency)
     training_time = int(post_request.get('training_time')) * 60
-    training_type = get_training_type_by_description(post_request.get('training_type'))
-    # Get user from request or use current as default
-    user = post_request.get('user', request.user)
-    # Manual training provider
+    # Training - type value
+    if is_running:
+        training_type = get_training_type_by_id(TYPE_RUNNING)
+    else:
+        training_type = get_training_type_by_description(post_request.get('training_type'))
+    # Training - user - if no user in the request, use default (current)
+    user = parse_user_from_request(request)
+    # Training - provider value - Manual training provider
     training_provider = get_training_provider_by_name(TRAINING_PROVIDER_MANUAL)
 
     training = create_training(user, training_provider, training_type, start_date, training_time)
@@ -264,5 +292,36 @@ def parse_training_request(request):
     return training
 
 
+# Parse POST request for training add
+def parse_running_training_request(request):
+    training = parse_training_request(request, True)
+    post_request = request.POST
+    # Running Training - distance in meters value
+    distance = int(post_request.get('distance'))
+    # Running Training - avg_speed - meters per second (DB data consistency)
+    avg_speed = round(distance/training.time, 3)
+    # Running Training - segments value - Default 1
+    segments_amount = int(post_request.get('segments_amount'))
+
+    # Running Training - running training type value
+    running_training_type = get_running_training_type_by_description(post_request.get('running_training_type'))
+
+    running_training = create_running_training(training, distance, avg_speed, running_training_type, segments=segments_amount)
+
+    return running_training
+
+
 def parse_date_time_from_string(date_time_str):
     return parser.parse(date_time_str)
+
+
+# Parse user by username
+# or get default user (current)
+def parse_user_from_request(request):
+    username = request.POST.get('user')
+    if username:
+        user = get_user_by_username(username)
+    else:
+        user = request.user
+
+    return user
