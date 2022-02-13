@@ -135,15 +135,15 @@ class FormResponse(models.Model):
     # Od ilu lat regularnie biegasz?
     running_years = models.IntegerField()
     # W jakim zakresie jest Twój najlepszy czas na 1km? (HH:MM:SS)
-    time_1km = models.ForeignKey(OneKmTiming, on_delete=models.PROTECT)
+    time_1km = models.ForeignKey(OneKmTiming, on_delete=models.PROTECT, null=True)
     # W jakim zakresie jest Twój najlepszy czas na 5km? (HH:MM:SS)
-    time_5km = models.ForeignKey(FiveKmTiming, on_delete=models.PROTECT)
+    time_5km = models.ForeignKey(FiveKmTiming, on_delete=models.PROTECT, null=True)
     # W jakim zakresie jest Twój najlepszy czas na 10km? (HH:MM:SS)
-    time_10km = models.ForeignKey(TenKmTiming, on_delete=models.PROTECT)
+    time_10km = models.ForeignKey(TenKmTiming, on_delete=models.PROTECT, null=True)
     # W jakim zakresie jest Twój najlepszy czas na 21,0975km - Półmaraton? (HH:MM:SS)
-    time_21km = models.ForeignKey(HalfMarathonTiming, on_delete=models.PROTECT)
+    time_21km = models.ForeignKey(HalfMarathonTiming, on_delete=models.PROTECT, null=True)
     # W jakim zakresie jest Twój najlepszy czas na 42,195km - Maraton? (HH:MM:SS)
-    time_42km = models.ForeignKey(MarathonTiming, on_delete=models.PROTECT)
+    time_42km = models.ForeignKey(MarathonTiming, on_delete=models.PROTECT, null=True)
     # Ile treningów biegowych wykonujesz średnio w ciągu tygodnia?
     training_amount = models.IntegerField()
     # Ile kilometrów pokonujesz średnio podczas treningów biegowych w ciągu tygodnia?
