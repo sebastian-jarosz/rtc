@@ -1,5 +1,6 @@
 {% extends 'base_template.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 Add training - Running Training Comrade
@@ -12,7 +13,7 @@ Add training - Running Training Comrade
 <div class="page-hero d-flex align-items-center justify-content-center">
     <form action="/training/add/running/" method="post">
         {% csrf_token %}
-        {{ add_running_training_form }}
+        {{ add_running_training_form|crispy }}
         <input type="submit" class="btn btn-secondary" value="Dodaj trening">
     </form>
 </div>
