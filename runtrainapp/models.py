@@ -211,3 +211,10 @@ class ResponseOtherTraining(models.Model):
 class ResponseWellness(models.Model):
     response = models.ForeignKey(FormResponse, on_delete=models.CASCADE)
     wellness_type = models.ForeignKey(WellnessType, on_delete=models.PROTECT)
+
+
+class FormUser(models.Model):
+    # CASCADE - User deleted, training deleted
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    response = models.ForeignKey(FormResponse, on_delete=models.CASCADE)
+    is_main = models.BooleanField()
