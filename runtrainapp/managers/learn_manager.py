@@ -208,6 +208,8 @@ def summary_dt_model_by_dict(dt_model_dict):
 def show_and_save_dt_plot(dt_model_dict, dt_model_name):
     # DecisionTreeClassifier plot_tree
     print('DecisionTreeClassifier plot tree')
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Plot size
     # # plt.figure(figsize=(35, 30))
     plot_tree(dt_model_dict['model'], filled=True)
@@ -224,6 +226,8 @@ def show_and_save_dt_plot(dt_model_dict, dt_model_name):
 def show_and_save_dt_conf_matrix(dt_model_dict, dt_model_name):
     # DecisionTreeClassifier confusion_matrix
     print('DecisionTreeClassifier confusion_matrix')
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Create Confusion Matrix plot basing on test output and predictions
     ConfusionMatrixDisplay.from_predictions(dt_model_dict['y_tst'], dt_model_dict['predictions'])
     # Save plot to a file
@@ -238,7 +242,8 @@ def show_and_save_dt_conf_matrix(dt_model_dict, dt_model_name):
 def show_and_save_dt_tot_imp_vs_eff_alph(dt_model_dict, dt_model_name):
     print('DecisionTreeClassifier Total impurity of leaves vs effective alphas')
     dt_model = dt_model_dict['model']
-
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Plot size
     fig, ax = plt.subplots(figsize=(25, 20))
     # Calculate ccp_alphas and impurities
@@ -290,6 +295,8 @@ def summary_lr_model_by_dict(lr_model_dict):
 # Show and save LinearRegression predictions plot
 def show_and_save_lr_pred_plot(lr_model_dict, lr_model_name):
     print('LinearRegression predictions plot')
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Plot size
     # plt.figure(figsize=(25, 20))
     plt.plot(lr_model_dict['predictions'], "gd")
@@ -310,6 +317,8 @@ def show_and_save_lr_conf_matrix(lr_model_dict, lr_model_name):
     print('LinearRegression confusion_matrix')
     # Create Confusion Matrix plot basing on test output and predictions
     ConfusionMatrixDisplay.from_predictions(lr_model_dict['y_tst'], lr_model_dict['predictions'])
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Save plot to a file
     plt.savefig(get_plots_path() + lr_model_name + ' - confusion matrix.png')
     # Show plot
@@ -351,6 +360,8 @@ def summary_lr_model_by_dict(knr_model_dict):
 # Show and save KNeighborsRegressor predictions plot
 def show_and_save_knr_pred_plot(knr_model_dict, knr_model_name):
     print('KNeighborsRegressor predictions plot')
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Plot size
     # plt.figure(figsize=(25, 20))
     plt.plot(knr_model_dict['predictions'], "ys")
@@ -371,6 +382,8 @@ def show_and_save_knr_conf_matrix(knr_model_dict, knr_model_name):
     print('KNeighborsRegressor confusion_matrix')
     # Create Confusion Matrix plot basing on test output and predictions
     ConfusionMatrixDisplay.from_predictions(knr_model_dict['y_tst'], knr_model_dict['predictions'])
+    # Turn off GUI Interactive Mode
+    plt.ioff()
     # Save plot to a file
     plt.savefig(get_plots_path() + knr_model_name + ' - confusion matrix.png')
     # Show plot
