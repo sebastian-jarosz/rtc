@@ -11,6 +11,9 @@ PER_PAGE = 200
 # Account Provider Name
 STRAVA_ACCOUNT_PROVIDER = 'strava'
 
+# Training Provider
+TRAINING_PROVIDER_MANUAL = 'Manual'
+
 # Training Type IDs
 TYPE_STRENGTH = 1
 TYPE_SWIMMING = 2
@@ -31,3 +34,5 @@ CONTEXT_HTTP_EXCEPTION = 'http_exception'
 CONTEXT_TABLE = 'table'
 CONTEXT_TRAINING = 'training'
 CONTEXT_FORM_RESPONSE = 'form_response'
+CONTEXT_ADD_TRAINING_FORM = 'add_training_form'
+CONTEXT_EXCEPTION = 'exception'

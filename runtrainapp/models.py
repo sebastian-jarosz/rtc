@@ -94,7 +94,7 @@ class Training(models.Model):
     # PROTECT - Protects Provider removal
     provider = models.ForeignKey(TrainingProvider, on_delete=models.PROTECT)
     # Training Code from Provider (if not Manual)
-    external_code = models.CharField(max_length=100)
+    external_code = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return "Training %i - %s" % (self.id, self.type)

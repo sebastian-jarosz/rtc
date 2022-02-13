@@ -1,0 +1,45 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+{% block title %}
+Add training - Running Training Comrade
+{% endblock title %}
+
+{% block body_data %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h1>Add Training</h1>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <form action="/training/add/" method="post">
+        {% csrf_token %}
+        {{ add_training_form }}
+        <input type="submit" class="btn btn-secondary" value="Dodaj trening">
+    </form>
+</div>
+
+<!-- Success msg -->
+{% if training %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-success alert-dismissible" id="addTrainingSuccess">
+        <button type="button" class="close">&times;</button>
+        <strong>Udało się!</strong> Trening został dodany pod ID: {{ training.id }}
+    </div>
+</div>
+{% endif %}
+
+<!-- Exception msg -->
+{% if exception %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <div class="alert alert-danger alert-dismissible" id="addTrainingError">
+        <button type="button" class="close">&times;</button>
+        <strong>Error! Training not saved</strong>
+        Problem details: {{ exception }}
+    </div>
+</div>
+{% endif %}
+
+{% endblock body_data %}
+
+{% block custom_js %}
+    <script type="text/javascript" src="{% static 'admin/form_management.js' %}"></script>
+{% endblock custom_js %}

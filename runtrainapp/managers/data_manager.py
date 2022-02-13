@@ -1,6 +1,7 @@
 from runtrainapp.models import *
 from ..utils.constants import *
 from ..utils.form_constants import *
+from dateutil import parser
 
 
 def get_training_provider_by_name(provider_name):
@@ -17,6 +18,36 @@ def get_training_type_by_description(description):
         return TrainingType.objects.get(description=description)
     except TrainingType.DoesNotExist:
         return TrainingType.objects.get(id=TYPE_OTHER)
+
+
+# Get training types list
+# Running excluded by default
+def get_training_types_description_list(exclude_running=True):
+    if exclude_running:
+        all_training_types = TrainingType.objects.exclude(id=TYPE_RUNNING)
+    else:
+        all_training_types = TrainingType.objects.all()
+
+    result = []
+    for training_type in all_training_types:
+        result.append((training_type.description, training_type.description))
+
+    return result
+
+
+# Get user list
+# Running excluded by default
+def get_user_list(user_name, is_admin=False):
+    if is_admin:
+        user_list = User.objects.all()
+    else:
+        user_list = User.objects.filter(username=user_name)
+
+    result = []
+    for user in user_list:
+        result.append((user.username, user.username))
+
+    return result
 
 
 def get_running_training_type_by_id(type_id):
@@ -68,14 +99,16 @@ def get_all_form_responses_count():
 
 
 # Create Training object and save into DB or return existing object
-def create_training(user, provider, training_type, start_date, elapsed_time, external_code):
+def create_training(user, provider, training_type, start_date, elapsed_time, external_code=None):
     obj, created = Training.objects.get_or_create(
         user=user,
         type=training_type,
         start_date=start_date,
         time=elapsed_time,
         provider=provider,
-        external_code=external_code
+        defaults={
+            'external_code': external_code,
+        }
     )
 
     if created:
@@ -212,3 +245,24 @@ def create_response_wellness(form_response, wellness_type):
         print("ResponseWellness:  %s\t- EXIST" % obj.id)
 
     return obj
+
+
+# Parse POST request for training add
+def parse_training_request(request):
+    post_request = request.POST
+    start_date = parse_date_time_from_string(post_request.get('start_date'))
+    # Change training type to seconds (As data from strava)
+    training_time = int(post_request.get('training_time')) * 60
+    training_type = get_training_type_by_description(post_request.get('training_type'))
+    # Get user from request or use current as default
+    user = post_request.get('user', request.user)
+    # Manual training provider
+    training_provider = get_training_provider_by_name(TRAINING_PROVIDER_MANUAL)
+
+    training = create_training(user, training_provider, training_type, start_date, training_time)
+
+    return training
+
+
+def parse_date_time_from_string(date_time_str):
+    return parser.parse(date_time_str)

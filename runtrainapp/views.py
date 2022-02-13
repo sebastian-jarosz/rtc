@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 
+from runtrainapp.forms import AddTrainingForm
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
@@ -59,6 +59,26 @@ def training(request, training_id):
     context = create_response_context(training_obj)
 
     return render(request, 'training/training.html', context)
+
+
+def add_training(request):
+    context_args = []
+    if request.method == 'POST':
+        try:
+            training_obj = parse_training_request(request)
+            context_args.append(training_obj)
+        except Exception as e:
+            # Add exception in case of failure
+            context_args.append(e)
+
+    # If request.method = GET
+    users = get_user_list(request.user, request.user.is_staff)
+    form = AddTrainingForm(get_training_types_description_list(), users, request.user.is_staff)
+    context_args.append(form)
+
+    context = create_response_context(*context_args)
+
+    return render(request, 'training/add_training.html', context)
 
 
 # List all running trainings

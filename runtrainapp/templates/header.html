@@ -34,10 +34,23 @@
                 {% endif %}
             </li>
 
+            <!-- Training management available only for logged users -->
+            <li class="nav-item dropdown">
+                {% if not user.is_anonymous %}
+                    <a class="nav-link dropdown-toggle" href="#" id="navuserdrop" data-toggle="dropdown">
+                        Training Management
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'add training' %}">Add Training</a>
+                        <a class="dropdown-item" href="{% url 'add training' %}">Add Running Training</a>
+                    </div>
+                {% endif %}
+            </li>
+
             <!-- Administration available only for Admin-->
             {% if user.is_staff %}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navservicesdrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navadministrationdrop" data-toggle="dropdown">
                     Administration
                 </a>
                 <div class="dropdown-menu">

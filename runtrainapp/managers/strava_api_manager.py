@@ -4,7 +4,6 @@ from dateutil import parser
 from .auth_manager import *
 from .data_manager import *
 from .exception_manager import *
-from runtrainapp.models import *
 
 
 def get_list_of_running_activities(user):
