@@ -51,10 +51,3 @@ $("#parseResponses").click(function() {
         },
     })
 });
-
-//Alert should be able to reappear (BS will remove it after first close)
-$(function() {
-   $(document).on('click', '.close', function() {
-       $(this).parent().hide();
-   })
-});
