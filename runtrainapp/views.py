@@ -197,3 +197,8 @@ def generate_training(request):
     context = create_response_context(*context_args)
 
     return render(request, 'training/generate_training.html', context)
+
+
+def generate_training_result(request):
+    context = {}
+    return render(request, 'training/generate_training_result.html', context)

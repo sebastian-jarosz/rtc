@@ -51,6 +51,10 @@
                 <a class="nav-link" href="{% url 'generate training' %}">Training Generator</a>
             </li>
 
+            <li>
+                <a class="nav-link" href="{% url 'generate training result' %}">Generated Training Result</a>
+            </li>
+
             <!-- Administration available only for Admin-->
             {% if user.is_staff %}
             <li class="nav-item dropdown">
