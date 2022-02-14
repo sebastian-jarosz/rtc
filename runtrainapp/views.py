@@ -193,6 +193,7 @@ def generate_training(request):
             context_args.append(form_user)
         except Exception as e:
             # Add exception in case of failure
+            print(e)
             context_args.append(e)
 
     # Generate Training Form Init

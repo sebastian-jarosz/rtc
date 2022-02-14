@@ -6,8 +6,14 @@ from ..models import *
 from django.core import serializers
 
 
+def generate_predictions(main_form_user):
+    generate_predictions_by_form_user(main_form_user)
+    improve_and_predict_by_main_form(main_form_user, improve_level=0.1)
+    improve_and_predict_by_main_form(main_form_user, improve_level=0.2)
+
+
 # Generate predictions basing on FormUser object
-def generate_predictions(form_user):
+def generate_predictions_by_form_user(form_user):
     # Get form object
     form_response = FormResponse.objects.filter(id=form_user.response.id)
 
@@ -42,8 +48,7 @@ def generate_predictions(form_user):
                              lr_model_5km_pred, lr_model_10km_pred,
                              lr_model_21km_pred, lr_model_42km_pred)
 
-    # Improve and predict
-    improve_and_predict_by_main_form(form_user)
+    return form_user
 
 
 # Get int (ID) from prediction
@@ -59,20 +64,33 @@ def round_prediction(prediction):
 
 
 # Improve current level of trainings and predict posible result
-def improve_and_predict_by_main_form(user_main_form):
+# decimal (percent) example 0.1, 0.2 - default percent 0.1
+def improve_and_predict_by_main_form(user_main_form, improve_level=0.1):
     # Main response is a base for next predictions
-    main_form = user_main_form.response
-
+    main_form_id = user_main_form.response.id
     improved_form = user_main_form.response
+
     # remove pk (copy instance) - https://docs.djangoproject.com/en/4.0/topics/db/queries/#copying-model-instances
     improved_form.pk = None
 
     clear_distance_timing_on_form(improved_form)
 
     # First improved form (by 10%)
-    improved_form = improve_form_by_decimal(improved_form, 0.1)
+    improved_form = improve_form_by_decimal(improved_form, improve_level)
 
-    print(str(improved_form))
+    improved_form.save()
+
+    form_user, crt = FormUser.objects.update_or_create(
+        user=user_main_form.user,
+        is_main=False,
+        response=improved_form,
+    )
+
+    form_user = generate_predictions_by_form_user(form_user)
+
+    # Fix overriden data
+    user_main_form.response = FormResponse.objects.get(id=main_form_id)
+    return form_user
 
 
 # Get timing objects (per distance and prediction)
@@ -132,7 +150,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.speed_training_amount = improve_level
 
     print('minute_per_km_speed_training')
-    print('CHOICE')
+    form.minute_per_km_speed_training = get_decreased_instance_by_level(form.minute_per_km_speed_training, improve_level, include_last=False, excluded_ids=[TIMING_9, TIMING_10, TIMING_12])
 
     print('threshold_training_amount')
     if form.threshold_training_amount > 0:
@@ -141,7 +159,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.threshold_training_amount = improve_level
         
     print('minute_per_km_threshold_training')
-    print('CHOICE')
+    form.minute_per_km_threshold_training = get_decreased_instance_by_level(form.minute_per_km_threshold_training, improve_level, include_last=False, excluded_ids=[TIMING_9, TIMING_10, TIMING_12])
 
     print('interval_training_amount')
     if form.interval_training_amount > 0:
@@ -150,7 +168,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.interval_training_amount = improve_level
         
     print('minute_per_km_interval_training')
-    print('CHOICE')
+    form.minute_per_km_interval_training = get_decreased_instance_by_level(form.minute_per_km_interval_training, improve_level, include_last=False, excluded_ids=[TIMING_9, TIMING_10, TIMING_12])
 
     print('run_up_training_amount')
     if form.run_up_training_amount > 0:
@@ -159,7 +177,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.run_up_training_amount = improve_level
 
     print('minute_per_km_run_up_training')
-    print('CHOICE')
+    form.minute_per_km_run_up_training = get_decreased_instance_by_level(form.minute_per_km_run_up_training, improve_level, include_last=False, excluded_ids=[TIMING_9, TIMING_10, TIMING_12])
 
     print('runway_amount')
     if form.run_up_training_amount > 0:
@@ -174,7 +192,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.km_per_runway = improve_level
 
     print('minute_per_km_runway')
-    print('CHOICE')
+    form.minute_per_km_runway = get_decreased_instance_by_level(form.minute_per_km_runway, improve_level, include_last=False, excluded_ids=[TIMING_11])
 
     print('other_trainings')
     print('SHOULD BE SAME')
@@ -216,7 +234,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.detraining_days = improve_level
 
     print('warmup')
-    print('CHOICE')
+    form.warmup = get_increased_instance_by_level(form.warmup, improve_level, include_last=False)
 
     print('warmup_time')
     if form.warmup_time > 0:
@@ -226,3 +244,46 @@ def improve_form_by_decimal(form, decimal=0.1):
 
     return form
 
+
+def get_decreased_instance_by_level(model_record, improve_level, include_last=True, excluded_ids=[]):
+    # Get model class
+    model = type(model_record)
+    model_min_id = 1
+    model_max_id = model.objects.latest('id').id
+    # Max record sometimes is not relevant
+    if not include_last:
+        model_max_id -= 1
+
+    # Current record
+    record_id = model_record.id
+    new_id = record_id - improve_level
+
+    while new_id in excluded_ids:
+        new_id = new_id - improve_level
+
+    if new_id < model_min_id:
+        new_id = model_min_id
+
+    decreased_record = model.objects.get(id=new_id)
+
+    return decreased_record
+
+
+def get_increased_instance_by_level(model_record, improve_level, include_last=True):
+    # Get model class
+    model = type(model_record)
+    model_max_id = model.objects.latest('id').id
+    # Max record sometimes is not relevant
+    if not include_last:
+        model_max_id -= 1
+
+    # Current record
+    record_id = model_record.id
+    new_id = record_id + improve_level
+
+    if new_id > model_max_id:
+        new_id = model_max_id
+
+    increased_record = model.objects.get(id=new_id)
+
+    return increased_record
