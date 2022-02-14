@@ -185,16 +185,13 @@ def generate_training(request):
     context_args = []
     if request.method == 'POST':
         try:
-
-            running_training_obj = parse_generate_training_request(request)
-            context_args.append(running_training_obj)
+            # Form user obj created from UI data
+            form_user = parse_generate_training_request(request)
+            context_args.append(form_user)
         except Exception as e:
             # Add exception in case of failure
             context_args.append(e)
 
-    generate_training_form = GenerateTrainingForm()
-    context_args.append(generate_training_form)
-
-    context = create_response_context(*context_args)
+    context = create_response_context(context_args)
 
     return render(request, 'training/generate_training.html', context)

@@ -51,6 +51,7 @@ def get_running_training_types_description_list():
 def get_user_by_username(username):
     return User.objects.get(username=username)
 
+
 # Get user list
 # Running excluded by default
 def get_user_list(user_name, is_admin=False):
@@ -149,8 +150,13 @@ def get_warmup_frequency_description_list():
     return result
 
 
-def get_all_form_responses():
-    return FormResponse.objects.all()
+# Get all form responses
+# By default exclude forms provided for training generation
+def get_all_form_responses(exclude_user_additions=True):
+    if exclude_user_additions:
+        return FormResponse.objects.exclude(id__in=FormUser.objects.values('response'))
+    else:
+        return FormResponse.objects.all()
 
 
 def get_all_form_responses_count():
@@ -215,37 +221,37 @@ def create_form_response_and_related_data_by_dict(data_dict):
 # Create ResponseWellness object and save into DB or return existing object
 def create_form_response_by_dict(data_dict):
     obj, created = FormResponse.objects.get_or_create(
-        year_of_birth=data_dict[INDEX_YEAR_OF_BIRTH],
-        height=data_dict[INDEX_HEIGHT],
-        weight=data_dict[INDEX_WEIGHT],
-        running_years=data_dict[INDEX_RUNNING_YEARS],
-        time_1km=data_dict[INDEX_TIME_1KM],
-        time_5km=data_dict[INDEX_TIME_5KM],
-        time_10km=data_dict[INDEX_TIME_10KM],
-        time_21km=data_dict[INDEX_TIME_21KM],
-        time_42km=data_dict[INDEX_TIME_42KM],
-        training_amount=data_dict[INDEX_TRAINING_AMOUNT],
-        km_amount=data_dict[INDEX_KM_AMOUNT],
-        speed_training_amount=data_dict[INDEX_SPEED_TRAINING_AMOUNT],
-        minute_per_km_speed_training=data_dict[INDEX_MINUTE_PER_KM_SPEED_TRAINING],
-        threshold_training_amount=data_dict[INDEX_THRESHOLD_TRAINING_AMOUNT],
-        minute_per_km_threshold_training=data_dict[INDEX_MINUTE_PER_KM_THRESHOLD_TRAINING],
-        interval_training_amount=data_dict[INDEX_INTERVAL_TRAINING_AMOUNT],
-        minute_per_km_interval_training=data_dict[INDEX_MINUTE_PER_KM_INTERVAL_TRAINING],
-        run_up_training_amount=data_dict[INDEX_RUN_UP_TRAINING_AMOUNT],
-        minute_per_km_run_up_training=data_dict[INDEX_MINUTE_PER_KM_RUN_UP_TRAINING],
-        runway_amount=data_dict[INDEX_RUNWAY_AMOUNT],
-        km_per_runway=data_dict[INDEX_KM_PER_RUNWAY],
-        minute_per_km_runway=data_dict[INDEX_MINUTE_PER_KM_RUNWAY],
-        other_trainings=data_dict[INDEX_OTHER_TRAININGS],
-        other_trainings_amount=data_dict[INDEX_OTHER_TRAININGS_AMOUNT],
-        other_trainings_time=data_dict[INDEX_OTHER_TRAININGS_TIME],
-        wellness=data_dict[INDEX_WELLNESS],
-        wellness_amount=data_dict[INDEX_WELLNESS_AMOUNT],
-        detraining_amount=data_dict[INDEX_DETRAINING_AMOUNT],
-        detraining_days=data_dict[INDEX_DETRAINING_DAYS],
-        warmup=data_dict[INDEX_WARMUP],
-        warmup_time=data_dict[INDEX_WARMUP_TIME]
+        year_of_birth=data_dict.get(INDEX_YEAR_OF_BIRTH),
+        height=data_dict.get(INDEX_HEIGHT),
+        weight=data_dict.get(INDEX_WEIGHT),
+        running_years=data_dict.get(INDEX_RUNNING_YEARS),
+        time_1km=data_dict.get(INDEX_TIME_1KM),
+        time_5km=data_dict.get(INDEX_TIME_5KM),
+        time_10km=data_dict.get(INDEX_TIME_10KM),
+        time_21km=data_dict.get(INDEX_TIME_21KM),
+        time_42km=data_dict.get(INDEX_TIME_42KM),
+        training_amount=data_dict.get(INDEX_TRAINING_AMOUNT),
+        km_amount=data_dict.get(INDEX_KM_AMOUNT),
+        speed_training_amount=data_dict.get(INDEX_SPEED_TRAINING_AMOUNT),
+        minute_per_km_speed_training=data_dict.get(INDEX_MINUTE_PER_KM_SPEED_TRAINING),
+        threshold_training_amount=data_dict.get(INDEX_THRESHOLD_TRAINING_AMOUNT),
+        minute_per_km_threshold_training=data_dict.get(INDEX_MINUTE_PER_KM_THRESHOLD_TRAINING),
+        interval_training_amount=data_dict.get(INDEX_INTERVAL_TRAINING_AMOUNT),
+        minute_per_km_interval_training=data_dict.get(INDEX_MINUTE_PER_KM_INTERVAL_TRAINING),
+        run_up_training_amount=data_dict.get(INDEX_RUN_UP_TRAINING_AMOUNT),
+        minute_per_km_run_up_training=data_dict.get(INDEX_MINUTE_PER_KM_RUN_UP_TRAINING),
+        runway_amount=data_dict.get(INDEX_RUNWAY_AMOUNT),
+        km_per_runway=data_dict.get(INDEX_KM_PER_RUNWAY),
+        minute_per_km_runway=data_dict.get(INDEX_MINUTE_PER_KM_RUNWAY),
+        other_trainings=data_dict.get(INDEX_OTHER_TRAININGS),
+        other_trainings_amount=data_dict.get(INDEX_OTHER_TRAININGS_AMOUNT),
+        other_trainings_time=data_dict.get(INDEX_OTHER_TRAININGS_TIME),
+        wellness=data_dict.get(INDEX_WELLNESS),
+        wellness_amount=data_dict.get(INDEX_WELLNESS_AMOUNT),
+        detraining_amount=data_dict.get(INDEX_DETRAINING_AMOUNT),
+        detraining_days=data_dict.get(INDEX_DETRAINING_DAYS),
+        warmup=data_dict.get(INDEX_WARMUP),
+        warmup_time=data_dict.get(INDEX_WARMUP_TIME)
     )
 
     if created:
@@ -348,46 +354,96 @@ def parse_running_training_request(request):
 
 
 def parse_generate_training_request(request):
+    data_dict = parse_data_to_dict(request)
+    form_response = create_form_response_by_dict(data_dict)
+    user = request.user
+
+    # Form created from UI is marked as main (base for training generation)
+    # Update main form for each training generation
+    obj, crt = FormUser.objects.update_or_create(
+        user=user,
+        is_main=True,
+        defaults={
+            'response': form_response,
+        }
+    )
+
+    return obj
+
+
+def parse_data_to_dict(request):
     post_request = request.POST
+
+    parsed_data_dict = {}
     # Generate Training - start_date value
     year_of_birth = int(post_request.get('year_of_birth'))
+    parsed_data_dict[INDEX_YEAR_OF_BIRTH] = year_of_birth
     height = int(post_request.get('height'))
+    parsed_data_dict[INDEX_HEIGHT] = height
     weight = int(post_request.get('weight'))
+    parsed_data_dict[INDEX_WEIGHT] = weight
     running_years = int(post_request.get('running_years'))
+    parsed_data_dict[INDEX_RUNNING_YEARS] = running_years or 0
     training_amount = int(post_request.get('training_amount'))
+    parsed_data_dict[INDEX_TRAINING_AMOUNT] = training_amount
     km_amount = int(post_request.get('km_amount'))
+    parsed_data_dict[INDEX_KM_AMOUNT] = km_amount
     speed_training_amount = int(post_request.get('speed_training_amount'))
-    minute_per_km_speed_training_id = get_training_timing_by_description(post_request.get('minute_per_km_speed_training_id'))
+    parsed_data_dict[INDEX_SPEED_TRAINING_AMOUNT] = speed_training_amount
+    minute_per_km_speed_training = get_training_timing_by_description(
+        post_request.get('minute_per_km_speed_training_id'))
+    parsed_data_dict[INDEX_MINUTE_PER_KM_SPEED_TRAINING] = minute_per_km_speed_training
     threshold_training_amount = int(post_request.get('threshold_training_amount'))
-    minute_per_km_threshold_training_id = get_training_timing_by_description(post_request.get('minute_per_km_threshold_training_id'))
+    parsed_data_dict[INDEX_THRESHOLD_TRAINING_AMOUNT] = threshold_training_amount
+    minute_per_km_threshold_training = get_training_timing_by_description(
+        post_request.get('minute_per_km_threshold_training_id'))
+    parsed_data_dict[INDEX_MINUTE_PER_KM_THRESHOLD_TRAINING] = minute_per_km_threshold_training
     interval_training_amount = int(post_request.get('interval_training_amount'))
-    minute_per_km_interval_training_id = get_training_timing_by_description(post_request.get('minute_per_km_interval_training_id'))
+    parsed_data_dict[INDEX_INTERVAL_TRAINING_AMOUNT] = interval_training_amount
+    minute_per_km_interval_training = get_training_timing_by_description(
+        post_request.get('minute_per_km_interval_training_id'))
+    parsed_data_dict[INDEX_MINUTE_PER_KM_INTERVAL_TRAINING] = minute_per_km_interval_training
     run_up_training_amount = int(post_request.get('run_up_training_amount'))
-    minute_per_km_run_up_training_id = get_training_timing_by_description(post_request.get('minute_per_km_interval_training_id'))
+    parsed_data_dict[INDEX_RUN_UP_TRAINING_AMOUNT] = run_up_training_amount
+    minute_per_km_run_up_training = get_training_timing_by_description(
+        post_request.get('minute_per_km_interval_training_id'))
+    parsed_data_dict[INDEX_MINUTE_PER_KM_RUN_UP_TRAINING] = minute_per_km_run_up_training
     runway_amount = int(post_request.get('runway_amount'))
+    parsed_data_dict[INDEX_RUNWAY_AMOUNT] = runway_amount
     km_per_runway = int(post_request.get('km_per_runway'))
-    minute_per_km_runway_id = get_training_timing_by_description(post_request.get('minute_per_km_runway_id'))
+    parsed_data_dict[INDEX_KM_PER_RUNWAY] = km_per_runway
+    minute_per_km_runway = get_training_timing_by_description(post_request.get('minute_per_km_runway_id'))
+    parsed_data_dict[INDEX_MINUTE_PER_KM_RUNWAY] = minute_per_km_runway
     # other_trainings - Default False
     other_trainings_str = post_request.get('other_trainings', 'false')
     if other_trainings_str.lower() == 'false':
         other_trainings = False
     else:
         other_trainings = True
+    parsed_data_dict[INDEX_OTHER_TRAININGS] = other_trainings
     other_trainings_amount = int(post_request.get('other_trainings_amount'))
+    parsed_data_dict[INDEX_OTHER_TRAININGS_AMOUNT] = other_trainings_amount or 0
     other_trainings_time = int(post_request.get('other_trainings_time'))
+    parsed_data_dict[INDEX_OTHER_TRAININGS_TIME] = other_trainings_time or 0
     # wellness - Default False
     wellness_str = post_request.get('other_trainings', 'false')
     if wellness_str.lower() == 'false':
         wellness = False
     else:
         wellness = True
+    parsed_data_dict[INDEX_WELLNESS] = wellness
     wellness_amount = int(post_request.get('wellness_amount'))
+    parsed_data_dict[INDEX_WELLNESS_AMOUNT] = wellness_amount or 0
     detraining_amount = int(post_request.get('detraining_amount'))
+    parsed_data_dict[INDEX_DETRAINING_AMOUNT] = detraining_amount
     detraining_days = int(post_request.get('detraining_days'))
-    warmup_id = get_warmup_frequency_by_description(post_request.get('warmup_id'))
+    parsed_data_dict[INDEX_DETRAINING_DAYS] = detraining_days
+    warmup = get_warmup_frequency_by_description(post_request.get('warmup_id'))
+    parsed_data_dict[INDEX_WARMUP] = warmup
     warmup_time = int(post_request.get('warmup_time'))
+    parsed_data_dict[INDEX_WARMUP_TIME] = warmup_time
 
-    return 'training'
+    return parsed_data_dict
 
 
 def parse_date_time_from_string(date_time_str):
