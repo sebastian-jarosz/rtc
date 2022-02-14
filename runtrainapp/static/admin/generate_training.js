@@ -9,11 +9,22 @@ $("#generatorForm").submit(function(e) {
     $.ajax({
         type: "POST",
         url: actionUrl,
-        data: form.serialize(), // serializes the form's elements.
-        success: function(data)
-        {
-          alert(data); // show response from the php script.
-        }
+        data: form.serialize(),
+        beforeSend: function() {
+            $("#generateTraining").hide();
+            $("#generateTrainingSpinner").show();
+        },
+        // hides the spinner after completion of request, whether successfull or failor.
+        complete: function() {
+            $("#generateTrainingSpinner").hide();
+            $("#generateTraining").show();
+        },
+        success: function(data) {
+            $("#generateTrainingSuccess").show();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $("#generateTrainingError").show();
+        },
     });
 
 });

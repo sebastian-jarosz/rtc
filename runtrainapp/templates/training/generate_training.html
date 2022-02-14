@@ -16,32 +16,31 @@ Generate Training - Running Training Comrade
     <form action="/training/generator/" method="post" id="generatorForm">
         {% csrf_token %}
         {{ generate_training_form|crispy }}
-        <input type="submit" class="btn btn-secondary" value="Generuj propozycje treningu">
+        <input type="submit" class="btn btn-secondary" value="Generuj propozycje treningu" id="generateTraining">
+        <!-- Hidden spinner -->
+        <div class="spinner-border text-secondary" id="generateTrainingSpinner" style="display: none;"></div>
     </form>
 </div>
 
-
 <!-- Success msg -->
-<!--{% if running_training %}-->
 <div class="page-hero d-flex align-items-center justify-content-center">
-    <div class="alert alert-success alert-dismissible" id="generateTrainingSuccess">
+    <div class="alert alert-success alert-dismissible" id="generateTrainingSuccess" style="display: none;">
         <button type="button" class="close">&times;</button>
         <strong>Udało się!</strong>
-        Wygenerowane propozycje są dostępne tutaj tutaj URL
+        Wygenerowane propozycje są dostępne tutaj tutaj
+        <!-- TODO Start -->
+        <a href="{% url 'index' %}">URL</a>
     </div>
 </div>
-<!--{% endif %}-->
 
 <!-- Exception msg -->
-{% if exception %}
 <div class="page-hero d-flex align-items-center justify-content-center">
-    <div class="alert alert-danger alert-dismissible" id="generateTrainingError">
+    <div class="alert alert-danger alert-dismissible" id="generateTrainingError" style="display: none;">
         <button type="button" class="close">&times;</button>
-        <strong>Error! Wystąpił problem podczas generowania propozycji</strong>
-        Szczegóły problemu: {{ exception }}
+        <strong>Error!</strong>
+        Wystąpił problem podczas generowania propozycji
     </div>
 </div>
-{% endif %}
 {% endblock body_data %}
 
 {% block custom_js %}

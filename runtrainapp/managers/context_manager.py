@@ -26,6 +26,8 @@ def create_response_context(*args):
             add_running_training_to_context(arg, context)
         elif isinstance(arg, FormResponse):
             add_form_response_to_context(arg, context)
+        elif isinstance(arg, FormUser):
+            add_form_user_to_context(arg, context)
         elif isinstance(arg, AddTrainingForm):
             add_training_form_to_context(arg, context)
         elif isinstance(arg, AddRunningTrainingForm):
@@ -66,6 +68,11 @@ def add_running_training_to_context(running_training, context):
 # Add Form Response to the context
 def add_form_response_to_context(form_response, context):
     context[CONTEXT_FORM_RESPONSE] = form_response
+
+
+# Add Form Response to the context
+def add_form_user_to_context(form_user, context):
+    context[CONTEXT_FORM_USER] = form_user
 
 
 # Add Training Form to the context

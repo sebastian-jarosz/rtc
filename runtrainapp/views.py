@@ -185,16 +185,10 @@ def teach(request):
 def generate_training(request):
     context_args = []
     if request.method == 'POST':
-        try:
-            # Form user obj created from UI data
-            form_user = parse_generate_training_request(request)
-            generate_predictions(form_user)
-
-            context_args.append(form_user)
-        except Exception as e:
-            # Add exception in case of failure
-            print(e)
-            context_args.append(e)
+        # Form user obj created from UI data
+        form_user = parse_generate_training_request(request)
+        generate_predictions(form_user)
+        context_args.append(form_user)
 
     # Generate Training Form Init
     form = GenerateTrainingForm()
