@@ -114,6 +114,10 @@ def get_marathon_timing_by_description(description):
     return MarathonTiming.objects.get(description=description)
 
 
+def get_timing_by_model_and_id(model, id):
+    return model.objects.get(id=id)
+
+
 def get_training_timing_by_description(description):
     return TrainingTiming.objects.get(description=description)
 
@@ -355,8 +359,15 @@ def parse_running_training_request(request):
 
 def parse_generate_training_request(request):
     data_dict = parse_data_to_dict(request)
-    form_response = create_form_response_by_dict(data_dict)
     user = request.user
+
+    # Delete main form if exists
+    existing_main_form_user = FormUser.objects.filter(user=user, is_main=True).first()
+    if existing_main_form_user is not None:
+        existing_main_form_user.response.delete()
+
+    # Create form response before relation to user
+    form_response = create_form_response_by_dict(data_dict)
 
     # Form created from UI is marked as main (base for training generation)
     # Update main form for each training generation
@@ -421,18 +432,30 @@ def parse_data_to_dict(request):
     else:
         other_trainings = True
     parsed_data_dict[INDEX_OTHER_TRAININGS] = other_trainings
-    other_trainings_amount = int(post_request.get('other_trainings_amount'))
+    # If no other trainings - 0 by default
+    if other_trainings:
+        other_trainings_amount = int(post_request.get('other_trainings_amount'))
+    else:
+        other_trainings_amount = 0
     parsed_data_dict[INDEX_OTHER_TRAININGS_AMOUNT] = other_trainings_amount or 0
-    other_trainings_time = int(post_request.get('other_trainings_time'))
+    # If no other trainings - 0 by default
+    if other_trainings:
+        other_trainings_time = int(post_request.get('other_trainings_time'))
+    else:
+        other_trainings_time = 0
     parsed_data_dict[INDEX_OTHER_TRAININGS_TIME] = other_trainings_time or 0
     # wellness - Default False
-    wellness_str = post_request.get('other_trainings', 'false')
+    wellness_str = post_request.get('wellness', 'false')
     if wellness_str.lower() == 'false':
         wellness = False
     else:
         wellness = True
     parsed_data_dict[INDEX_WELLNESS] = wellness
-    wellness_amount = int(post_request.get('wellness_amount'))
+    # If no wellness - 0 by default
+    if wellness:
+        wellness_amount = int(post_request.get('wellness_amount'))
+    else:
+        wellness_amount = 0
     parsed_data_dict[INDEX_WELLNESS_AMOUNT] = wellness_amount or 0
     detraining_amount = int(post_request.get('detraining_amount'))
     parsed_data_dict[INDEX_DETRAINING_AMOUNT] = detraining_amount

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from runtrainapp.forms import *
+from runtrainapp.managers.generator_manager import generate_predictions
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
@@ -187,11 +188,17 @@ def generate_training(request):
         try:
             # Form user obj created from UI data
             form_user = parse_generate_training_request(request)
+            generate_predictions(form_user)
+
             context_args.append(form_user)
         except Exception as e:
             # Add exception in case of failure
             context_args.append(e)
 
-    context = create_response_context(context_args)
+    # Generate Training Form Init
+    form = GenerateTrainingForm()
+    context_args.append(form)
+
+    context = create_response_context(*context_args)
 
     return render(request, 'training/generate_training.html', context)

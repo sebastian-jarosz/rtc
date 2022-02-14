@@ -29,11 +29,20 @@ def produce_csv(path=None):
 
     form_responses = get_all_form_responses()
 
-    df = pd.DataFrame(list(form_responses.values()))
+    df = create_df_from_form_responses_obj_list(list(form_responses.values()))
+
+    print('Saving mapped from data to: ' + path)
+    df.to_csv(path)
+
+
+def create_df_from_form_responses_obj_list(form_responses_obj_list):
+    df = pd.DataFrame(form_responses_obj_list)
 
     # Convert values from bool to int
     df['other_trainings'] = df['other_trainings'].astype(int)
     df['wellness'] = df['wellness'].astype(int)
 
-    print('Saving mapped from data to: ' + path)
-    df.to_csv(path)
+    # Drop id column if exists
+    df = df.drop(labels=['id'], axis=1, errors='ignore')
+
+    return df

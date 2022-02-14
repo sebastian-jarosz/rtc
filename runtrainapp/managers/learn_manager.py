@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
 from matplotlib import pyplot as plt
 from joblib import dump, load
+from ..utils.constants import *
 import os
 
 
@@ -52,7 +53,7 @@ def decision_tree_fit_and_measure(X, y, test_size=0.1):
 # Create, train Linear Regression model and measure accuracy
 # Default 10% of data (0.1) - for testing
 def linear_reg_fit_and_measure(X, y, test_size=0.1):
-    # Split dataframe for Training and Testing
+    # Split dat aframe for Training and Testing
     X_trn, X_tst, y_trn, y_tst = train_test_split(X, y, test_size=test_size)
 
     # Create and train model
@@ -392,49 +393,8 @@ def show_and_save_knr_conf_matrix(knr_model_dict, knr_model_name):
     plt.clf()
 
 
-def learn_model():
-    current_path = os.getcwd()
-    # Default path
-    file = current_path + '/form_data/Mapped - Ankieta dla biegaczy.csv'
-    # Read csv file with responses
-    df = pd.read_csv(file)
-
-    # Drop additionally added column and id column
-    df = df.drop(columns=['Unnamed: 0', 'id'])
-
-    # Show the shape of dataframe (rows, columns)
-    print('Form answer dataframe shape')
-    break_line()
-    print(df.shape)
-
-    print('Form answer dataframe columns')
-    break_line()
-    for column in df.columns:
-        print(column)
-
-    # Split data - Input (X) and Output (y)
-    # X - Input Data
-    X = df.filter(['year_of_birth', 'height', 'weight', 'running_years', 'time_1km_id', 'time_5km_id', 'time_10km_id',
-                   'time_21km_id', 'time_42km_id'])
-
-    # y - Output data
-    y = df.drop(
-        columns=['year_of_birth', 'height', 'weight', 'running_years', 'time_1km_id', 'time_5km_id', 'time_10km_id',
-                 'time_21km_id', 'time_42km_id'])
-
-    # Input columns
-    print('X (Input) Columns')
-    break_line()
-    for column in X.columns:
-        print(column)
-
-    break_empty()
-
-    print('y (Output) Columns')
-    break_line()
-    for column in y.columns:
-        print(column)
-
+# Split df to distance specific dfs
+def prepare_distance_dfs(df):
     # df for time 1km
     df_time_1km = df.loc[df['time_1km_id'] != 11]
     df_time_1km = df_time_1km.drop(columns=['time_5km_id', 'time_10km_id', 'time_21km_id', 'time_42km_id'])
@@ -475,6 +435,43 @@ def learn_model():
     print(df_time_42km)
     break_empty()
 
+    return df_time_1km, df_time_5km, df_time_10km, df_time_21km, df_time_42km
+
+
+# Split to X and y basing on distance column name
+def split_X_y_by_distance_column(distance_df, distance_column_name):
+    # Split data - Input (X) and Output (y)
+    # X - Input Data
+    X = distance_df.drop(columns=[distance_column_name])
+
+    # y - Output data
+    y = distance_df.filter([distance_column_name])
+
+    return X, y
+
+
+def learn_model():
+    current_path = os.getcwd()
+    # Default path
+    file = current_path + '/form_data/Mapped - Ankieta dla biegaczy.csv'
+    # Read csv file with responses
+    df = pd.read_csv(file)
+
+    # Drop additionally added column and id column
+    df = df.drop(columns=['Unnamed: 0', 'id'])
+
+    # Show the shape of dataframe (rows, columns)
+    print('Form answer dataframe shape')
+    break_line()
+    print(df.shape)
+
+    print('Form answer dataframe columns')
+    break_line()
+    for column in df.columns:
+        print(column)
+
+    df_time_1km, df_time_5km, df_time_10km, df_time_21km, df_time_42km = prepare_distance_dfs(df)
+
     # Execute directiories creation
     create_models_dir()
     create_plots_dir()
@@ -483,10 +480,8 @@ def learn_model():
     # Training data with 1km time only
     # Split data - Input (X) and Output (y)
     # X - Input Data
-    X_time_1km = df_time_1km.drop(columns=['time_1km_id'])
-
     # y - Output data
-    y_time_1km = df_time_1km.filter(['time_1km_id'])
+    X_time_1km, y_time_1km = split_X_y_by_distance_column(df_time_1km, COLUMN_TIME_1KM_ID)
 
     # DecisionTreeClassifier
     dt_model_1km_dict = decision_tree_fit_and_measure(X_time_1km, y_time_1km)
@@ -498,18 +493,16 @@ def learn_model():
     knr_model_1km_dict = k_neigh_reg_fit_and_measure(X_time_1km, y_time_1km)
 
     # Visualisation df_time_1km models
-    visualise_dt_model_by_dict(dt_model_1km_dict, 'dtm_model_1km')
-    visualise_lr_model_by_dict(lr_model_1km_dict, 'lr_model_1km')
-    visualise_knr_model_by_dict(knr_model_1km_dict, 'knr_model_1km')
+    visualise_dt_model_by_dict(dt_model_1km_dict, DTM_MODEL_1KM)
+    visualise_lr_model_by_dict(lr_model_1km_dict, LR_MODEL_1KM)
+    visualise_knr_model_by_dict(knr_model_1km_dict, KNR_MODEL_1KM)
 
     # Dataframe df_time_5km
     # Training data with 5km time only
     # Split data - Input (X) and Output (y)
     # X - Input Data
-    X_time_5km = df_time_5km.drop(columns=['time_5km_id'])
-
     # y - Output data
-    y_time_5km = df_time_5km.filter(['time_5km_id'])
+    X_time_5km, y_time_5km = split_X_y_by_distance_column(df_time_5km, COLUMN_TIME_5KM_ID)
 
     # DecisionTreeClassifier
     dt_model_5km_dict = decision_tree_fit_and_measure(X_time_5km, y_time_5km)
@@ -517,14 +510,20 @@ def learn_model():
     # LinearRegression
     lr_model_5km_dict = linear_reg_fit_and_measure(X_time_5km, y_time_5km)
 
+    # KNeighborsRegressor
+    knr_model_5km_dict = k_neigh_reg_fit_and_measure(X_time_5km, y_time_5km)
+
+    # Visualisation df_time_5km models
+    visualise_dt_model_by_dict(dt_model_5km_dict, DTM_MODEL_5KM)
+    visualise_lr_model_by_dict(lr_model_5km_dict, LR_MODEL_5KM)
+    visualise_knr_model_by_dict(knr_model_5km_dict, KNR_MODEL_5KM)
+
     # Dataframe df_time_10km
     # Training data with 10km time only
     # Split data - Input (X) and Output (y)
     # X - Input Data
-    X_time_10km = df_time_10km.drop(columns=['time_10km_id'])
-
     # y - Output data
-    y_time_10km = df_time_10km.filter(['time_10km_id'])
+    X_time_10km, y_time_10km = split_X_y_by_distance_column(df_time_10km, COLUMN_TIME_10KM_ID)
 
     # DecisionTreeClassifier
     dt_model_10km_dict = decision_tree_fit_and_measure(X_time_10km, y_time_10km)
@@ -536,18 +535,16 @@ def learn_model():
     knr_model_10km_dict = k_neigh_reg_fit_and_measure(X_time_10km, y_time_10km)
 
     # Visualisation df_time_10km models
-    visualise_dt_model_by_dict(dt_model_10km_dict, 'dtm_model_10km')
-    visualise_lr_model_by_dict(lr_model_10km_dict, 'lr_model_10km')
-    visualise_knr_model_by_dict(knr_model_10km_dict, 'knr_model_10km')
+    visualise_dt_model_by_dict(dt_model_10km_dict, DTM_MODEL_10KM)
+    visualise_lr_model_by_dict(lr_model_10km_dict, LR_MODEL_10KM)
+    visualise_knr_model_by_dict(knr_model_10km_dict, KNR_MODEL_10KM)
 
     # Dataframe df_time_21km
     # Training data with 21km time only
     # Split data - Input (X) and Output (y)
     # X - Input Data
-    X_time_21km = df_time_21km.drop(columns=['time_21km_id'])
-
     # y - Output data
-    y_time_21km = df_time_21km.filter(['time_21km_id'])
+    X_time_21km, y_time_21km = split_X_y_by_distance_column(df_time_21km, COLUMN_TIME_21KM_ID)
 
     # DecisionTreeClassifier
     dt_model_21km_dict = decision_tree_fit_and_measure(X_time_21km, y_time_21km)
@@ -559,18 +556,16 @@ def learn_model():
     knr_model_21km_dict = k_neigh_reg_fit_and_measure(X_time_21km, y_time_21km)
 
     # Visualisation df_time_21km models
-    visualise_dt_model_by_dict(dt_model_21km_dict, 'dtm_model_21km')
-    visualise_lr_model_by_dict(lr_model_21km_dict, 'lr_model_21km')
-    visualise_knr_model_by_dict(knr_model_21km_dict, 'knr_model_21km')
+    visualise_dt_model_by_dict(dt_model_21km_dict, DTM_MODEL_21KM)
+    visualise_lr_model_by_dict(lr_model_21km_dict, LR_MODEL_21KM)
+    visualise_knr_model_by_dict(knr_model_21km_dict, KNR_MODEL_21KM)
 
     # Dataframe df_time_42km
     # Training data with 42km time only
     # Split data - Input (X) and Output (y)
     # X - Input Data
-    X_time_42km = df_time_42km.drop(columns=['time_42km_id'])
-
     # y - Output data
-    y_time_42km = df_time_42km.filter(['time_42km_id'])
+    X_time_42km, y_time_42km = split_X_y_by_distance_column(df_time_42km, COLUMN_TIME_42KM_ID)
 
     # DecisionTreeClassifier
     dt_model_42km_dict = decision_tree_fit_and_measure(X_time_42km, y_time_42km)
@@ -582,14 +577,6 @@ def learn_model():
     knr_model_42km_dict = k_neigh_reg_fit_and_measure(X_time_42km, y_time_42km)
 
     # Visualisation df_time_42km models
-    visualise_dt_model_by_dict(dt_model_42km_dict, 'dtm_model_42km')
-    visualise_lr_model_by_dict(lr_model_42km_dict, 'lr_model_42km')
-    visualise_knr_model_by_dict(knr_model_42km_dict, 'knr_model_42km')
-
-    # KNeighborsRegressor
-    knr_model_5km_dict = k_neigh_reg_fit_and_measure(X_time_5km, y_time_5km)
-
-    # Visualisation df_time_5km models
-    visualise_dt_model_by_dict(dt_model_5km_dict, 'dtm_model_5km')
-    visualise_lr_model_by_dict(lr_model_5km_dict, 'lr_model_5km')
-    visualise_knr_model_by_dict(knr_model_5km_dict, 'knr_model_5km')
+    visualise_dt_model_by_dict(dt_model_42km_dict, DTM_MODEL_42KM)
+    visualise_lr_model_by_dict(lr_model_42km_dict, LR_MODEL_42KM)
+    visualise_knr_model_by_dict(knr_model_42km_dict, KNR_MODEL_42KM)
