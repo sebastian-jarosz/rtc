@@ -8,8 +8,8 @@ from django.core import serializers
 
 def generate_predictions(main_form_user):
     generate_predictions_by_form_user(main_form_user)
-    improve_and_predict_by_main_form(main_form_user, improve_level=0.1)
-    improve_and_predict_by_main_form(main_form_user, improve_level=0.2)
+    improve_and_predict_by_main_form(main_form_user, improve_decimal=0.1)
+    improve_and_predict_by_main_form(main_form_user, improve_decimal=0.3)
 
 
 # Generate predictions basing on FormUser object
@@ -60,12 +60,16 @@ def round_prediction(prediction):
     prediction = prediction.astype(int)
 
     # Only one record expected
-    return prediction[0]
+    # In case prediction will give 0.45 etc, rounding will be 0
+    # then it must be 1 to not cause additional problems
+    prediction = prediction[0] if prediction[0] > 0 else 1
+
+    return prediction
 
 
 # Improve current level of trainings and predict posible result
 # decimal (percent) example 0.1, 0.2 - default percent 0.1
-def improve_and_predict_by_main_form(user_main_form, improve_level=0.1):
+def improve_and_predict_by_main_form(user_main_form, improve_decimal=0.1):
     # Main response is a base for next predictions
     main_form_id = user_main_form.response.id
     improved_form = user_main_form.response
@@ -76,7 +80,7 @@ def improve_and_predict_by_main_form(user_main_form, improve_level=0.1):
     clear_distance_timing_on_form(improved_form)
 
     # First improved form (by 10%)
-    improved_form = improve_form_by_decimal(improved_form, improve_level)
+    improved_form = improve_form_by_decimal(improved_form, improve_decimal)
 
     improved_form.save()
 

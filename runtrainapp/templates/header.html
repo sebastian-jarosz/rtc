@@ -35,8 +35,8 @@
             </li>
 
             <!-- Training management available only for logged users -->
+            {% if not user.is_anonymous %}
             <li class="nav-item dropdown">
-                {% if not user.is_anonymous %}
                     <a class="nav-link dropdown-toggle" href="#" id="navuserdrop" data-toggle="dropdown">
                         Training Management
                     </a>
@@ -44,17 +44,14 @@
                         <a class="dropdown-item" href="{% url 'add training' %}">Add Training</a>
                         <a class="dropdown-item" href="{% url 'add running training' %}">Add Running Training</a>
                     </div>
-                {% endif %}
             </li>
-
-            <li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'generate training' %}">Training Generator</a>
             </li>
-
-            <li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'generate training result' %}">Generated Training Result</a>
             </li>
-
+            {% endif %}
             <!-- Administration available only for Admin-->
             {% if user.is_staff %}
             <li class="nav-item dropdown">
