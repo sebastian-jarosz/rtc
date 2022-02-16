@@ -184,10 +184,10 @@ def improve_form_by_decimal(form, decimal=0.1):
     form.minute_per_km_run_up_training = get_decreased_instance_by_level(form.minute_per_km_run_up_training, improve_level, include_last=False, excluded_ids=[TIMING_9, TIMING_10, TIMING_12])
 
     print('runway_amount')
-    if form.run_up_training_amount > 0:
-        form.run_up_training_amount = round(form.run_up_training_amount * improve_decimal)
+    if form.runway_amount > 0:
+        form.runway_amount = round(form.runway_amount * improve_decimal)
     else:
-        form.run_up_training_amount = improve_level
+        form.runway_amount = improve_level
 
     print('km_per_runway')
     if form.km_per_runway > 0:
@@ -238,7 +238,7 @@ def improve_form_by_decimal(form, decimal=0.1):
         form.detraining_days = improve_level
 
     print('warmup')
-    form.warmup = get_increased_instance_by_level(form.warmup, improve_level, include_last=False)
+    form.warmup = get_decreased_instance_by_level(form.warmup, improve_level)
 
     print('warmup_time')
     if form.warmup_time > 0:
@@ -271,23 +271,3 @@ def get_decreased_instance_by_level(model_record, improve_level, include_last=Tr
     decreased_record = model.objects.get(id=new_id)
 
     return decreased_record
-
-
-def get_increased_instance_by_level(model_record, improve_level, include_last=True):
-    # Get model class
-    model = type(model_record)
-    model_max_id = model.objects.latest('id').id
-    # Max record sometimes is not relevant
-    if not include_last:
-        model_max_id -= 1
-
-    # Current record
-    record_id = model_record.id
-    new_id = record_id + improve_level
-
-    if new_id > model_max_id:
-        new_id = model_max_id
-
-    increased_record = model.objects.get(id=new_id)
-
-    return increased_record
