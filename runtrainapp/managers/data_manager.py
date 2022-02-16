@@ -82,10 +82,6 @@ def get_trainings_amount_by_provider_and_user(provider, user):
     return Training.objects.filter(user=user, provider=provider).count()
 
 
-def get_one_km_timing_by_description(description):
-    return OneKmTiming.objects.get(description=description)
-
-
 # Get timing descriptions by model
 def get_timing_description_list_by_model(model):
     all_timings = model.objects.all()
@@ -96,6 +92,10 @@ def get_timing_description_list_by_model(model):
         result.append((timing.description, timing.description))
 
     return result
+
+
+def get_one_km_timing_by_description(description):
+    return OneKmTiming.objects.get(description=description)
 
 
 def get_five_km_timing_by_description(description):
@@ -122,6 +122,11 @@ def get_training_timing_by_description(description):
     return TrainingTiming.objects.get(description=description)
 
 
+# Get TrainingTiming description by id
+def get_training_timing_description_by_id(timing_id):
+    return TrainingTiming.objects.get(id=timing_id).description
+
+
 # Get timing descriptions by model
 def get_training_timing_description_list(excluded_ids=[]):
     all_timings = TrainingTiming.objects.exclude(id__in=excluded_ids)
@@ -140,6 +145,11 @@ def get_wellness_type_by_description(description):
 
 def get_warmup_frequency_by_description(description):
     return WarmupFrequency.objects.get(description=description)
+
+
+# Get WarmupFrequency description by id
+def get_warmup_freq_description_by_id(freq_id):
+    return WarmupFrequency.objects.get(id=freq_id).description
 
 
 # Get timing descriptions by model
