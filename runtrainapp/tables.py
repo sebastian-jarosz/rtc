@@ -8,7 +8,7 @@ class TrainingTable(tables.Table):
     user = tables.Column(verbose_name="Użytkownik")
     type = tables.Column(verbose_name="Typ")
     start_date = tables.TemplateColumn('{{ record.get_formatted_start_date }}', verbose_name="Czas rozpoczęcia")
-    time = tables.TemplateColumn('{{ record.get_formatted_time }}', verbose_name="Długość treningu (w minutach)")
+    time = tables.TemplateColumn('{{ record.get_formatted_time }}', verbose_name="Długość treningu")
     provider = tables.Column(verbose_name="Sposób dodania")
     external_code = tables.Column(verbose_name="Zewnętrzne ID")
 

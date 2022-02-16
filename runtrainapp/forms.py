@@ -36,14 +36,14 @@ class AddTrainingForm(forms.Form):
 
 class AddRunningTrainingForm(forms.Form):
     # Training part
-    start_date = forms.DateTimeField(initial=get_current_date_time)
-    training_time = forms.IntegerField(label='Training time (in minutes)', min_value=1)
-    user = forms.ChoiceField(disabled=True)
+    start_date = forms.DateTimeField(initial=get_current_date_time, label="Czas rozpoczęcia")
+    training_time = forms.IntegerField(label='Długość treningu (w minutach)', min_value=1)
+    user = forms.ChoiceField(label='Użytkownik', disabled=True)
 
     # Running Training part
-    distance = forms.DecimalField(label='Distance (in meters)', min_value=0.1, decimal_places=2)
+    distance = forms.DecimalField(label='Dystans (w metrach)', min_value=0.1, decimal_places=2)
     # Segments - Default value 1
-    segments_amount = forms.IntegerField(label='Segments amount', initial=1, min_value=1)
+    segments_amount = forms.IntegerField(label='Ilość segmentów', initial=1, min_value=1)
     running_training_type = forms.ChoiceField()
 
     def __init__(self, users, running_training_types, is_admin=False):
