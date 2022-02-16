@@ -19,10 +19,10 @@ class CustomAddEmailForm(AddEmailForm):
 
 
 class AddTrainingForm(forms.Form):
-    start_date = forms.DateTimeField(initial=get_current_date_time)
-    training_time = forms.IntegerField(label='Training time (in minutes)', min_value=1)
-    training_type = forms.ChoiceField()
-    user = forms.ChoiceField(disabled=True)
+    start_date = forms.DateTimeField(initial=get_current_date_time, label="Czas rozpoczęcia")
+    training_time = forms.IntegerField(label='Długość treningu (w minutach)', min_value=1)
+    training_type = forms.ChoiceField(label='Typ treningu')
+    user = forms.ChoiceField(label='Użytkownik', disabled=True)
 
     def __init__(self, training_types, users, is_admin=False):
         super().__init__()
