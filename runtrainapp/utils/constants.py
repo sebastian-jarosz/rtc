@@ -37,6 +37,8 @@ RUNNING_TYPE_NOT_SPECIFIED = 6
 # context_names
 CONTEXT_AUTH_EXCEPTION = 'auth_exception'
 CONTEXT_HTTP_EXCEPTION = 'http_exception'
+CONTEXT_RESULT_INPUT_TABLE = 'result_input_table'
+CONTEXT_RESULT_OUTPUT_TABLE = 'result_output_table'
 CONTEXT_TABLE = 'table'
 CONTEXT_TRAINING = 'training'
 CONTEXT_RUNNING_TRAINING = 'running_training'
