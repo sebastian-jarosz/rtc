@@ -52,10 +52,10 @@ def get_generator_input_df(main_form_dict, first_improved_form_dict, second_impr
             second_improved_gen_input_values.append(second_improved_form_dict[column])
 
     input_df_data = {
-        "": Q_GENERATOR_INPUT.values(),
-        "Obecne treningi": main_form_gen_input_values,
-        "Propozycja poprawnienia treningów o 10%": first_improved_gen_input_values,
-        "Propozycja poprawnienia treningów o 30%": second_improved_gen_input_values
+        "dsc": Q_GENERATOR_INPUT.values(),
+        "main": main_form_gen_input_values,
+        "first": first_improved_gen_input_values,
+        "second": second_improved_gen_input_values
     }
 
     input_df = pd.DataFrame(input_df_data)
@@ -82,10 +82,10 @@ def get_generator_output_df(main_form_dict, first_improved_form_dict, second_imp
         second_improved_gen_output_values.append(second_dsc)
 
     output_df_data = {
-        "": Q_GENERATOR_OUTPUT.values(),
-        "Obecne rezultaty": main_form_gen_output_values,
-        "Rezultaty po poprawieniu treningów o 10%": first_improved_gen_output_values,
-        "Rezultaty po poprawieniu treningów o 30%": second_improved_gen_output_values
+        "dsc": Q_GENERATOR_OUTPUT.values(),
+        "main": main_form_gen_output_values,
+        "first": first_improved_gen_output_values,
+        "second": second_improved_gen_output_values
     }
 
     output_df = pd.DataFrame(output_df_data)
