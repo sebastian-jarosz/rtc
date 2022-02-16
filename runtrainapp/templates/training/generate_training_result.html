@@ -13,4 +13,12 @@ Generate Training - Running Training Comrade
     <h1>Generate Training Result</h1>
 </div>
 
+<!-- If training generation was not triggered -->
+{% if result is None %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h1>Trening nie został jeszcze wygenerowany</h1>
+    <a href="{% url 'generate training' %}">Wygeneruj swój trening teraz!</a>
+</div>
+{% endif %}
+
 {% endblock body_data %}
