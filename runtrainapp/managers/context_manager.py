@@ -1,7 +1,7 @@
 # Create response context from provided args
 from django_tables2 import Table, RequestConfig
 from runtrainapp.forms import *
-from runtrainapp.models import *
+from runtrainapp.tables import *
 from runtrainapp.utils.exceptions import *
 from runtrainapp.utils.constants import *
 
@@ -18,6 +18,10 @@ def create_response_context(*args):
             add_auth_exception_to_context(arg, context)
         elif isinstance(arg, HttpException):
             add_http_exception_to_context(arg, context)
+        elif isinstance(arg, GeneratedResultInputTable):
+            add_result_input_table_to_context(arg, context)
+        elif isinstance(arg, GeneratedResultOutputTable):
+            add_result_output_table_to_context(arg, context)
         elif isinstance(arg, Table):
             add_table_to_context(arg, context)
         elif isinstance(arg, Training):
@@ -92,4 +96,12 @@ def add_generate_training_form_to_context(generate_training_form, context):
 
 def add_general_exception_to_context(exception, context):
     context[CONTEXT_EXCEPTION] = str(exception)
+
+
+def add_result_input_table_to_context(result_input_table, context):
+    context[CONTEXT_RESULT_INPUT_TABLE] = result_input_table
+
+
+def add_result_output_table_to_context(result_output_table, context):
+    context[CONTEXT_RESULT_OUTPUT_TABLE] = result_output_table
 
