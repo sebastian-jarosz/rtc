@@ -167,6 +167,16 @@ def get_all_form_responses_count():
     return FormResponse.objects.count()
 
 
+# get_user_main_form if exists
+def get_user_main_form(user):
+    try:
+        main_form = FormUser.objects.get(user=user, is_main=True)
+    except FormUser.DoesNotExist:
+        main_form = None
+
+    return main_form
+
+
 # Create Training object and save into DB or return existing object
 def create_training(user, provider, training_type, start_date, elapsed_time, external_code=None):
     obj, created = Training.objects.get_or_create(
