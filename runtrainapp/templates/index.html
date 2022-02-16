@@ -1,16 +1,22 @@
 {% extends 'base_template.html' %}
 
 {% block title %}
-Welcome - Running Training Comrade
+Witaj w RunningGenerator!
 {% endblock title %}
 
 {% block body_data %}
-
-<div class="page-hero d-flex align-items-center justify-content-center">
+<div class="container">
     {% if user.is_authenticated %}
-        <h1>Hello, {{ user.username }}! </br> Welcome in Running Traning App</h1>
+    <h1>Witaj, {{ user.username }}!</h1>
+    <h3>Zapraszam do korzystania z Running Generator</h3>
     {% else %}
-        <h1>Hello, new user. Please log in.</br> Welcome in Running Traning App</h1>
+    <h1>Witaj, nowy użytkowniku! </h1>
+    <h3>
+        Aby korzystać z aplikacji
+        <strong><a href="{% url 'account_signup' %}">Załóż konto,</a></strong>
+         lub
+        <strong><a href="{% url 'account_login' %}">Zaloguj się</a></strong>
+    </h3>
     {% endif %}
 </div>
 
