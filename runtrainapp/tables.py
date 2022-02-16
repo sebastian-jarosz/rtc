@@ -37,3 +37,25 @@ class FormResponsesTable(tables.Table):
     class Meta:
         sequence = ('response', 'show_details')
         template_name = "tables/responsive-table.html"
+
+
+class GeneratedResultInputTable(tables.Table):
+    # No name for this column
+    dsc = tables.Column(verbose_name="", orderable=False)
+    main = tables.Column(verbose_name="Obecne treningi", orderable=False)
+    first = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~10%", orderable=False)
+    second = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~30%", orderable=False)
+
+    class Meta:
+        template_name = "tables/responsive-table.html"
+
+
+class GeneratedResultOutputTable(tables.Table):
+    # No name for this column
+    dsc = tables.Column(verbose_name="", orderable=False)
+    main = tables.Column(verbose_name="Obecne rezultaty", orderable=False)
+    first = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~10%", orderable=False)
+    second = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~30%", orderable=False)
+
+    class Meta:
+        template_name = "tables/responsive-table.html"
