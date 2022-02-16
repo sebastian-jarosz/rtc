@@ -216,6 +216,14 @@ def generate_training_result(request):
     # Output part
     output_df = get_generator_output_df(main_form_dict, first_improved_form_dict, second_improved_form_dict)
 
+    # Generate table basing on input result and add to context
+    result_input_table = GeneratedResultInputTable(input_df.to_dict('records'))
+    context_args.append(result_input_table)
+
+    # Generate table basing on input result and add to context
+    result_output_table = GeneratedResultOutputTable(output_df.to_dict('records'))
+    context_args.append(result_output_table)
+
     context = create_response_context(*context_args)
 
     return render(request, 'training/generate_training_result.html', context)
