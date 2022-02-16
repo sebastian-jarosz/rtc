@@ -4,7 +4,7 @@
     <!-- Brand -->
     <div class="navbar-header">
         <a class="navbar-brand" href="{% url 'index' %}">
-            Running Application
+            RunningGenerator
         </a>
     </div>
 
@@ -19,17 +19,17 @@
             <li class="nav-item dropdown">
                 {% if not user.is_anonymous %}
                     <a class="nav-link dropdown-toggle" href="#" id="navdatadrop" data-toggle="dropdown">
-                        Training Data
+                        Dane Treningowe
                     </a>
                     <div class="dropdown-menu">
                         <!-- All trainings are available only for Admin-->
                         {% if user.is_staff %}
-                            <a class="dropdown-item" href="{% url 'all trainings' %}">All Trainings</a>
-                            <a class="dropdown-item" href="{% url 'all running trainings' %}">All Running Trainings</a>
+                            <a class="dropdown-item" href="{% url 'all trainings' %}">Wszystkie treningi</a>
+                            <a class="dropdown-item" href="{% url 'all running trainings' %}">Wszystkie treningi biegowe</a>
                         {% endif %}
                         <!-- My trainings are available only for logged users-->
-                            <a class="dropdown-item" href="{% url 'all user trainings' %}">My Trainings</a>
-                            <a class="dropdown-item" href="{% url 'all user running trainings' %}">My Running Trainings</a>
+                            <a class="dropdown-item" href="{% url 'all user trainings' %}">Moje treningi</a>
+                            <a class="dropdown-item" href="{% url 'all user running trainings' %}">Moje treningi biegowe</a>
                     </div>
                 {% endif %}
             </li>
@@ -38,30 +38,32 @@
             {% if not user.is_anonymous %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navuserdrop" data-toggle="dropdown">
-                    Training Management
+                    Zarządzaj treningami
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'add training' %}">Add Training</a>
-                    <a class="dropdown-item" href="{% url 'add running training' %}">Add Running Training</a>
+                    <a class="dropdown-item" href="{% url 'add training' %}">Dodaj Trening</a>
+                    <a class="dropdown-item" href="{% url 'add running training' %}">Dodaj trening biegowy</a>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'generate training' %}">Training Generator</a>
+                <a class="nav-link" href="{% url 'generate training' %}">
+                    <strong>Wygeneruj swój trening!</strong>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'generate training result' %}">Generated Training Result</a>
+                <a class="nav-link" href="{% url 'generate training result' %}">Wygenerowane propozycje treningów</a>
             </li>
             {% endif %}
             <!-- Administration available only for Admin-->
             {% if user.is_staff %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navadministrationdrop" data-toggle="dropdown">
-                    Administration
+                    Narzędzia administracyjne
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'form management' %}">Form Management</a>
-                    <a class="dropdown-item" href="{% url 'form responses' %}">Form Responses List</a>
-                    <a class="dropdown-item" href="{% url 'learn management' %}">Learn Management</a>
+                    <a class="dropdown-item" href="{% url 'form management' %}">Zarządzanie ankietami</a>
+                    <a class="dropdown-item" href="{% url 'form responses' %}">Wszystkie odpowiedzi</a>
+                    <a class="dropdown-item" href="{% url 'learn management' %}">Zarządzanie procesem nauczania</a>
                 </div>
             </li>
             {% endif %}
@@ -71,12 +73,12 @@
     <!--Auth Navbar Part-->
     <div>
         {% if user.is_authenticated %}
-            <a href="{% url 'account_profile' %}">My Profile</a>
+            <a href="{% url 'account_profile' %}">Mój profil</a>
             <a href="{% url 'account_logout' %}" class="fas fa-sign-out-alt"></a>
         {% else %}
-            <a href="{% url 'account_login' %}">Login</a>
-            <a>or</a>
-            <a href="{% url 'account_signup' %}">Sign Up</a>
+            <a href="{% url 'account_login' %}">Zaloguj się</a>
+            <a>lub</a>
+            <a href="{% url 'account_signup' %}">Załóż konto</a>
         {% endif %}
     </div>
 </nav>
