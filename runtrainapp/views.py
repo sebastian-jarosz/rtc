@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from runtrainapp.forms import *
 from runtrainapp.managers.generator_manager import generate_predictions
 from runtrainapp.managers.strava_api_manager import *
 from runtrainapp.managers.context_manager import *
 from runtrainapp.managers.form_responses_manager import *
 from runtrainapp.managers.learn_manager import *
 from runtrainapp.tables import *
+from runtrainapp.managers.generator_result_manager import *
 
 
 def index(request):
@@ -200,5 +200,22 @@ def generate_training(request):
 
 
 def generate_training_result(request):
-    context = {}
+    context_args = []
+
+    main_form = get_user_main_form(request.user)
+
+    # if main_form does not exists - means that user do not generated a training, return
+    if main_form is None:
+        return render(request, 'training/generate_training_result.html')
+
+    main_form_dict, first_improved_form_dict, second_improved_form_dict = get_main_and_improved_forms_dicts(main_form)
+
+    # Input part
+    input_df = get_generator_input_df(main_form_dict, first_improved_form_dict, second_improved_form_dict)
+
+    # Output part
+    output_df = get_generator_output_df(main_form_dict, first_improved_form_dict, second_improved_form_dict)
+
+    context = create_response_context(*context_args)
+
     return render(request, 'training/generate_training_result.html', context)
