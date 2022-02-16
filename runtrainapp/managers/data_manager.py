@@ -114,8 +114,8 @@ def get_marathon_timing_by_description(description):
     return MarathonTiming.objects.get(description=description)
 
 
-def get_timing_by_model_and_id(model, id):
-    return model.objects.get(id=id)
+def get_timing_by_model_and_id(model, timing_id):
+    return model.objects.get(id=timing_id)
 
 
 def get_training_timing_by_description(description):
