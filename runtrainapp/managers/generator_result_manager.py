@@ -60,6 +60,9 @@ def get_generator_input_df(main_form_dict, first_improved_form_dict, second_impr
 
     input_df = pd.DataFrame(input_df_data)
 
+    # Replace boolean with desc
+    input_df = input_df.astype(str).replace({'False': 'Nie', 'True': 'Tak'})
+
     return input_df
 
 
@@ -89,6 +92,9 @@ def get_generator_output_df(main_form_dict, first_improved_form_dict, second_imp
     }
 
     output_df = pd.DataFrame(output_df_data)
+
+    # Replace boolean with desc
+    output_df = output_df.astype(str).replace({'False': 'Nie', 'True': 'Tak'})
 
     return output_df
 
