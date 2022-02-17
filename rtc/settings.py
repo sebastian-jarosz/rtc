@@ -156,5 +156,6 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # Custom forms
 ACCOUNT_FORMS = {
     'add_email': 'runtrainapp.forms.CustomAddEmailForm',
-    'login': 'runtrainapp.forms.CustomLoginForm'
+    'login': 'runtrainapp.forms.CustomLoginForm',
+    'signup': 'runtrainapp.forms.CustomSignupForm'
 }

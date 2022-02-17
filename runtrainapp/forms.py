@@ -32,8 +32,16 @@ class CustomLoginForm(LoginForm):
 
 # Custom Signup Form
 class CustomSignupForm(SignupForm):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super(CustomSignupForm, self).__init__(*args, **kwargs)
+        self.fields['username'].label = "Login"
+        self.fields['username'].widget.attrs['placeholder'] = "Login"
+        self.fields['email'].label = "E-mail"
+        self.fields['email'].widget.attrs['placeholder'] = "E-mail"
+        self.fields['password1'].label = "Hasło"
+        self.fields['password1'].widget.attrs['placeholder'] = "Hasło"
+        self.fields['password2'].label = "Powtórz hasło"
+        self.fields['password2'].widget.attrs['placeholder'] = "Powtórz hasło"
 
 
 class AddTrainingForm(forms.Form):
