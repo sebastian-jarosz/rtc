@@ -1,4 +1,4 @@
-from allauth.account.forms import AddEmailForm
+from allauth.account.forms import AddEmailForm, LoginForm, SignupForm
 from allauth.account.models import EmailAddress
 from runtrainapp.models import *
 from django import forms
@@ -18,6 +18,22 @@ class CustomAddEmailForm(AddEmailForm):
         return EmailAddress.objects.add_email(
             request, self.user, self.cleaned_data["email"], confirm=False
         )
+
+
+# Custom Login Form
+class CustomLoginForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomLoginForm, self).__init__(*args, **kwargs)
+        self.fields['login'].label = "Login"
+        self.fields['login'].widget.attrs['placeholder'] = "Login"
+        self.fields['password'].label = "Hasło"
+        self.fields['password'].widget.attrs['placeholder'] = "Hasło"
+
+
+# Custom Signup Form
+class CustomSignupForm(SignupForm):
+    def __init__(self):
+        super().__init__()
 
 
 class AddTrainingForm(forms.Form):

@@ -154,4 +154,7 @@ LOGIN_REDIRECT_URL = "/"
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # Custom forms
-ACCOUNT_FORMS = {'add_email': 'runtrainapp.forms.CustomAddEmailForm'}
+ACCOUNT_FORMS = {
+    'add_email': 'runtrainapp.forms.CustomAddEmailForm',
+    'login': 'runtrainapp.forms.CustomLoginForm'
+}
