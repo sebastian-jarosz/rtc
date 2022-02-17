@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Form Management  - Running Training Comrade
+Zarządzanie ankietami - RunningGenerator
 {% endblock title %}
 
 {% block body_data %}
@@ -11,10 +11,10 @@ Form Management  - Running Training Comrade
 {% csrf_token %}
 
         <div class="page-hero d-flex align-items-center justify-content-center">
-            <h1>Form Management</h1>
+            <h1>Zarządzanie ankietami</h1>
         </div>
         <div class="page-hero d-flex align-items-center justify-content-center">
-            <h4>Current responses count: {{ form_responses_count }}</h4>
+            <h4>Obecna ilość wczytanych odpowiedzi: {{ form_responses_count }}</h4>
         </div>
 
         <!-- Parse responses part -->
@@ -31,13 +31,13 @@ Form Management  - Running Training Comrade
         <div class="page-hero d-flex align-items-center justify-content-center">
             <div class="alert alert-success alert-dismissible" id="parseResponsesSuccess" style="display: none;">
                 <button type="button" class="close">&times;</button>
-                <strong>Success!</strong> Responses parsing successfully executed.
+                <strong>Sukces!</strong> Odpowiedzi z pliku zostały poprawnie wczytane.
             </div>
         </div>
         <div class="page-hero d-flex align-items-center justify-content-center">
             <div class="alert alert-danger alert-dismissible" id="parseResponsesError" style="display: none;">
                 <button type="button" class="close">&times;</button>
-                <strong>Error!</strong> Problem occurred during responses parsing execution.
+                <strong>Error!</strong> Wystąpił problem podczas wczytywania odpowiedzi z pliku.
             </div>
         </div>
 
