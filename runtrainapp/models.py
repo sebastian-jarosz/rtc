@@ -97,7 +97,7 @@ class Training(models.Model):
     external_code = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return "Training %i - %s" % (self.id, self.type)
+        return "Trening - ID: %i\t- %s" % (self.id, self.type)
 
     def get_formatted_time(self):
         return datetime.timedelta(seconds=self.time)
@@ -199,7 +199,7 @@ class FormResponse(models.Model):
     warmup_time = models.IntegerField()
 
     def __str__(self):
-        return "Form Response %i\t- Year of Birth: %i\t Height: %i\t Weight: %i\t Running Years: %i" % \
+        return "Odpowiedź - ID: %i\t- Rok urodzenia: %i\t Wzrost: %i\t Waga: %i\t Lata doświadczenia w bieganiu: %i" % \
                (self.id, self.year_of_birth, self.height, self.weight, self.running_years)
 
 
