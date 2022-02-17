@@ -4,27 +4,30 @@
 
 
 {% block title %}
-Generate Training - Running Training Comrade
+Wygenerowane propozycje - RunningGenerator
 {% endblock title %}
 
 {% block body_data %}
-
-<div class="page-hero d-flex align-items-center justify-content-center">
-    <h1>Generate Training Result</h1>
-</div>
-
 <!-- If training generation was not triggered -->
 {% if result_input_table is None %}
 <div class="page-hero d-flex align-items-center justify-content-center">
     <h1>Trening nie został jeszcze wygenerowany</h1>
-    <a href="{% url 'generate training' %}">Wygeneruj swój trening teraz!</a>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h3>
+        <a href="{% url 'generate training' %}">Wygeneruj swój trening teraz!</a>
+    </h3>
 </div>
 {% endif %}
 
 {% if result_input_table is not None %}
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <h1>Wygenerowane propozycje treningu</h1>
+</div>
+
 <div class="container">
   <div class="row">
-    <h1>Result input</h1>
+    <h3>Obecne oraz proponowane jednostki treningowe</h3>
   </div>
   <div class="row">
     {% render_table result_input_table %}
@@ -35,7 +38,7 @@ Generate Training - Running Training Comrade
 {% if result_output_table is not None %}
 <div class="container">
   <div class="row">
-    <h1>Result output</h1>
+    <h3>Przewidywane wyniki po zastosowaniu obecnych i proponowanych jednostek treningowych</h3>
   </div>
   <div class="row">
     {% render_table result_output_table %}
