@@ -20,14 +20,15 @@ def page_not_found(request, exception):
 def profile(request):
     context_args = []
 
-    try:
-        result = get_list_of_running_activities(request.user)
-    except Exception as e:
-        context_args.append(e)
-
     context = create_response_context(*context_args)
 
     return render(request, 'account/profile.html', context)
+
+
+def get_running_trainings_from_strava(request):
+    result = get_list_of_running_activities(request.user)
+
+    return HttpResponse("get_running_trainings_from_strava invoked")
 
 
 # List all trainings

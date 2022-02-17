@@ -10,14 +10,14 @@ def get_list_of_running_activities(user):
     token = get_active_token_from_user(user, STRAVA_ACCOUNT_PROVIDER)
     activities_json_list = get_all_activities_from_strava_as_json_list(user, token)
     if activities_json_list is None:
-        return None
+        return 0
 
     filtered_json_list = list(filter(lambda x: (x.get('type') == 'Run'), activities_json_list))
 
     if is_creation_needed(filtered_json_list, user, STRAVA_ACCOUNT_PROVIDER):
         create_running_trainings(filtered_json_list, user, STRAVA_ACCOUNT_PROVIDER)
 
-    return filtered_json_list
+    return len(filtered_json_list)
 
 
 # Invoke Strava API to get all activities from a user

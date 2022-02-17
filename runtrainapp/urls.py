@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin/api/teach/', views.teach, name='teach'),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.profile, name="account_profile"),
+    path('accounts/api/strava/', views.get_running_trainings_from_strava, name="strava_api"),
     path('training/', views.list_all_trainings, name="all trainings"),
     path('training/add/', views.add_training, name="add training"),
     path('training/add/running/', views.add_running_training, name="add running training"),
