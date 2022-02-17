@@ -39,8 +39,9 @@ class RunningTrainingTable(tables.Table):
 
 
 class FormResponsesTable(tables.Table):
-    response = tables.TemplateColumn('{{ record }}', order_by="id")
-    show_details = tables.LinkColumn('response', args=[A('id')], order_by="id", text='Więcej informacji')
+    response = tables.TemplateColumn('{{ record }}', order_by="id", verbose_name="Odpowiedź do ankiety")
+    show_details = tables.LinkColumn('response', args=[A('id')], order_by="id", text='Więcej informacji',
+                                     verbose_name="")
 
     class Meta:
         sequence = ('response', 'show_details')
