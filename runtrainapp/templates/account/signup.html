@@ -2,15 +2,15 @@
 
 
 {% block title %}
-Sign Up - Running Training Comrade
+Załóż konto - RunningGenerator
 {% endblock title %}
 
 {% block body_data %}
 <div class="page-hero d-flex align-items-center justify-content-center">
-  <h1>Sign Up</h1>
+  <h1>Załóż konto</h1>
 </div>
 <div class="page-hero d-flex align-items-center justify-content-center">
-  <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+  <p>Już posiadasz konto? Zaloguj się <a href="{{ login_url }}">tutaj</a>.</p>
 </div>
 
 <!-- Sign Up form -->
@@ -22,13 +22,8 @@ Sign Up - Running Training Comrade
     {% if redirect_field_value %}
       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
-  <button type="submit">Sign Up &raquo;</button>
+  <button type="submit">Załóż konto &raquo;</button>
 </form>
 </div>
 
 {% endblock body_data %}
-
-{% block content %}
-
-
-{% endblock %}
