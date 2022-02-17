@@ -57,23 +57,71 @@ class ShowTrainingForm(forms.Form):
 
 
 class ShowFormResponse(forms.Form):
-    id = forms.CharField(label="ID", disabled=True)
-    user = forms.CharField(label='Użytkownik', disabled=True)
-    type = forms.CharField(label='Typ treningu', disabled=True)
-    start_date = forms.CharField(label="Czas rozpoczęcia", disabled=True)
-    time = forms.CharField(label='Długość treningu (w minutach)', disabled=True)
-    provider = forms.CharField(label='Sposób dodania', disabled=True)
-    external_code = forms.CharField(label='Zewnętrzne ID', disabled=True)
+    year_of_birth = forms.CharField(label=Q_YEAR_OF_BIRTH, disabled=True)
+    height = forms.CharField(label=Q_HEIGHT, disabled=True)
+    weight = forms.CharField(label=Q_WEIGHT, disabled=True)
+    running_years = forms.CharField(label=Q_RUNNING_YEARS, disabled=True)
+    time_1km = forms.CharField(label=Q_TIME_1KM, disabled=True)
+    time_5km = forms.CharField(label=Q_TIME_5KM, disabled=True)
+    time_10km = forms.CharField(label=Q_TIME_10KM, disabled=True)
+    time_21km = forms.CharField(label=Q_TIME_21KM, disabled=True)
+    time_42km = forms.CharField(label=Q_TIME_42KM, disabled=True)
+    training_amount = forms.CharField(label=Q_TRAINING_AMOUNT, disabled=True)
+    km_amount = forms.CharField(label=Q_KM_AMOUNT, disabled=True)
+    speed_training_amount = forms.CharField(label=Q_SPEED_TRAINING_AMOUNT, disabled=True)
+    minute_per_km_speed_training_id = forms.CharField(label=Q_MINUTE_PER_KM_SPEED_TRAINING)
+    threshold_training_amount = forms.CharField(label=Q_THRESHOLD_TRAINING_AMOUNT, disabled=True)
+    minute_per_km_threshold_training_id = forms.CharField(label=Q_MINUTE_PER_KM_THRESHOLD_TRAINING)
+    interval_training_amount = forms.CharField(label=Q_INTERVAL_TRAINING_AMOUNT, disabled=True)
+    minute_per_km_interval_training_id = forms.CharField(label=Q_MINUTE_PER_KM_INTERVAL_TRAINING)
+    run_up_training_amount = forms.CharField(label=Q_RUN_UP_TRAINING_AMOUNT, disabled=True)
+    minute_per_km_run_up_training_id = forms.CharField(label=Q_MINUTE_PER_KM_RUN_UP_TRAINING)
+    runway_amount = forms.CharField(label=Q_RUNWAY_AMOUNT, disabled=True)
+    km_per_runway = forms.CharField(label=Q_KM_PER_RUNWAY, disabled=True)
+    minute_per_km_runway_id = forms.CharField(label=Q_MINUTE_PER_KM_RUNWAY)
+    other_trainings = forms.CharField(label=Q_OTHER_TRAININGS, disabled=True)
+    other_trainings_amount = forms.CharField(label=Q_OTHER_TRAININGS_AMOUNT)
+    other_trainings_time = forms.CharField(label=Q_OTHER_TRAININGS_TIME, disabled=True)
+    wellness = forms.CharField(label=Q_WELLNESS, disabled=True)
+    wellness_amount = forms.CharField(label=Q_WELLNESS_AMOUNT, disabled=True)
+    detraining_amount = forms.CharField(label=Q_DETRAINING_AMOUNT, disabled=True)
+    detraining_days = forms.CharField(label=Q_DETRAINING_DAYS, disabled=True)
+    warmup_id = forms.CharField(label=Q_WARMUP)
+    warmup_time = forms.CharField(label=Q_WARMUP_TIME, disabled=True)
 
-    def __init__(self, training):
+    def __init__(self, response):
         super().__init__()
-        self['id'].field.initial = training.id
-        self['user'].field.initial = training.user
-        self['type'].field.initial = training.type
-        self['start_date'].field.initial = training.get_formatted_start_date()
-        self['time'].field.initial = training.get_formatted_time()
-        self['provider'].field.initial = training.provider
-        self['external_code'].field.initial = training.external_code
+        self['year_of_birth'].field.initial = response.year_of_birth
+        self['height'].field.initial = response.height
+        self['weight'].field.initial = response.weight
+        self['running_years'].field.initial = response.running_years
+        self['time_1km'].field.initial = response.time_1km
+        self['time_5km'].field.initial = response.time_5km
+        self['time_10km'].field.initial = response.time_10km
+        self['time_21km'].field.initial = response.time_21km
+        self['time_42km'].field.initial = response.time_42km
+        self['training_amount'].field.initial = response.training_amount
+        self['km_amount'].field.initial = response.km_amount
+        self['speed_training_amount'].field.initial = response.speed_training_amount
+        self['minute_per_km_speed_training_id'].field.initial = response.minute_per_km_speed_training_id
+        self['threshold_training_amount'].field.initial = response.threshold_training_amount
+        self['minute_per_km_threshold_training_id'].field.initial = response.minute_per_km_threshold_training_id
+        self['interval_training_amount'].field.initial = response.interval_training_amount
+        self['minute_per_km_interval_training_id'].field.initial = response.minute_per_km_interval_training_id
+        self['run_up_training_amount'].field.initial = response.run_up_training_amount
+        self['minute_per_km_run_up_training_id'].field.initial = response.minute_per_km_run_up_training_id
+        self['runway_amount'].field.initial = response.runway_amount
+        self['km_per_runway'].field.initial = response.km_per_runway
+        self['minute_per_km_runway_id'].field.initial = response.minute_per_km_runway_id
+        self['other_trainings'].field.initial = response.other_trainings
+        self['other_trainings_amount'].field.initial = response.other_trainings_amount
+        self['other_trainings_time'].field.initial = response.other_trainings_time
+        self['wellness'].field.initial = response.wellness
+        self['wellness_amount'].field.initial = response.wellness_amount
+        self['detraining_amount'].field.initial = response.detraining_amount
+        self['detraining_days'].field.initial = response.detraining_days
+        self['warmup_id'].field.initial = response.warmup_id
+        self['warmup_time'].field.initial = response.warmup_time
 
 
 class AddRunningTrainingForm(forms.Form):
@@ -124,8 +172,7 @@ class GenerateTrainingForm(forms.Form):
     detraining_amount = forms.IntegerField(label=Q_DETRAINING_AMOUNT, min_value=0, max_value=50)
     detraining_days = forms.IntegerField(label=Q_DETRAINING_DAYS, min_value=0, max_value=50)
     warmup_id = forms.ChoiceField(label=Q_WARMUP)
-    warmup_time = forms.IntegerField(label=Q_WARMUP_TIME, min_value=0,
-                                     max_value=50)
+    warmup_time = forms.IntegerField(label=Q_WARMUP_TIME, min_value=0, max_value=50)
 
     def __init__(self):
         super().__init__()
