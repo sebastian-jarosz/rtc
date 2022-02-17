@@ -3,6 +3,7 @@
 
 {% block title %}
 Learn Management  - Running Training Comrade
+Wszystkie odpowiedzi - RunningGenerator
 {% endblock title %}
 
 {% block body_data %}
@@ -11,10 +12,10 @@ Learn Management  - Running Training Comrade
 {% csrf_token %}
 
         <div class="page-hero d-flex align-items-center justify-content-center">
-            <h1>Learn Management</h1>
+            <h1>Zarządzanie procesem nauczania</h1>
         </div>
         <div class="page-hero d-flex align-items-center justify-content-center">
-            <h4>Current saved responses count: {{ form_responses_count }}</h4>
+            <h4>Obecna ilość wczytanych odpowiedzi: {{ form_responses_count }}</h4>
         </div>
 
         <!-- Parse responses part -->
@@ -24,10 +25,12 @@ Learn Management  - Running Training Comrade
                 <label for="doNotMapData" class="form-check-label">
                     Nie mapuj danych z bazy (zostanie użyty istniejący plik)
                 </label>
-                <button id="learnModels" type="button" class="btn btn-secondary">Wykonaj uczenie modelów</button>
-                <!-- Hidden spinner -->
-                <div class="spinner-border text-secondary" id="learnModelsSpinner" style="display: none;"></div>
             </div>
+        </div>
+        <div class="page-hero d-flex align-items-center justify-content-center">
+            <button id="learnModels" type="button" class="btn btn-secondary">Wykonaj uczenie modelów</button>
+            <!-- Hidden spinner -->
+            <div class="spinner-border text-secondary" id="learnModelsSpinner" style="display: none;"></div>
         </div>
 
         <div class="page-hero d-flex align-items-center justify-content-center">
