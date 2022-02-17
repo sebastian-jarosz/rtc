@@ -124,7 +124,7 @@ def list_all_user_running_trainings(request):
 
 
 def form_management(request):
-    form_responses_count = get_all_form_responses_count()
+    form_responses_count = get_loaded_form_responses_count()
     context = {
         'form_responses_count': form_responses_count
     }
@@ -163,7 +163,7 @@ def write_responses(request):
 
 
 def learn_management(request):
-    form_responses_count = get_all_form_responses_count()
+    form_responses_count = get_loaded_form_responses_count()
     context = {
         'form_responses_count': form_responses_count
     }

@@ -173,8 +173,8 @@ def get_all_form_responses(exclude_user_additions=True):
         return FormResponse.objects.all()
 
 
-def get_all_form_responses_count():
-    return FormResponse.objects.count()
+def get_loaded_form_responses_count():
+    return FormResponse.objects.exclude(id__in=FormUser.objects.values('response')).count()
 
 
 # get_user_main_form if exists
