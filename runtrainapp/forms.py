@@ -44,7 +44,7 @@ class AddRunningTrainingForm(forms.Form):
     distance = forms.DecimalField(label='Dystans (w metrach)', min_value=0.1, decimal_places=2)
     # Segments - Default value 1
     segments_amount = forms.IntegerField(label='Ilość segmentów', initial=1, min_value=1)
-    running_training_type = forms.ChoiceField()
+    running_training_type = forms.ChoiceField(label='Typ treningu biegowego')
 
     def __init__(self, users, running_training_types, is_admin=False):
         super().__init__()
