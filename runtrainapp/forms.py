@@ -69,24 +69,24 @@ class ShowFormResponse(forms.Form):
     training_amount = forms.CharField(label=Q_TRAINING_AMOUNT, disabled=True)
     km_amount = forms.CharField(label=Q_KM_AMOUNT, disabled=True)
     speed_training_amount = forms.CharField(label=Q_SPEED_TRAINING_AMOUNT, disabled=True)
-    minute_per_km_speed_training_id = forms.CharField(label=Q_MINUTE_PER_KM_SPEED_TRAINING)
+    minute_per_km_speed_training_id = forms.CharField(label=Q_MINUTE_PER_KM_SPEED_TRAINING, disabled=True)
     threshold_training_amount = forms.CharField(label=Q_THRESHOLD_TRAINING_AMOUNT, disabled=True)
-    minute_per_km_threshold_training_id = forms.CharField(label=Q_MINUTE_PER_KM_THRESHOLD_TRAINING)
+    minute_per_km_threshold_training_id = forms.CharField(label=Q_MINUTE_PER_KM_THRESHOLD_TRAINING, disabled=True)
     interval_training_amount = forms.CharField(label=Q_INTERVAL_TRAINING_AMOUNT, disabled=True)
-    minute_per_km_interval_training_id = forms.CharField(label=Q_MINUTE_PER_KM_INTERVAL_TRAINING)
+    minute_per_km_interval_training_id = forms.CharField(label=Q_MINUTE_PER_KM_INTERVAL_TRAINING, disabled=True)
     run_up_training_amount = forms.CharField(label=Q_RUN_UP_TRAINING_AMOUNT, disabled=True)
-    minute_per_km_run_up_training_id = forms.CharField(label=Q_MINUTE_PER_KM_RUN_UP_TRAINING)
+    minute_per_km_run_up_training_id = forms.CharField(label=Q_MINUTE_PER_KM_RUN_UP_TRAINING, disabled=True)
     runway_amount = forms.CharField(label=Q_RUNWAY_AMOUNT, disabled=True)
     km_per_runway = forms.CharField(label=Q_KM_PER_RUNWAY, disabled=True)
-    minute_per_km_runway_id = forms.CharField(label=Q_MINUTE_PER_KM_RUNWAY)
+    minute_per_km_runway_id = forms.CharField(label=Q_MINUTE_PER_KM_RUNWAY, disabled=True)
     other_trainings = forms.CharField(label=Q_OTHER_TRAININGS, disabled=True)
-    other_trainings_amount = forms.CharField(label=Q_OTHER_TRAININGS_AMOUNT)
+    other_trainings_amount = forms.CharField(label=Q_OTHER_TRAININGS_AMOUNT, disabled=True)
     other_trainings_time = forms.CharField(label=Q_OTHER_TRAININGS_TIME, disabled=True)
     wellness = forms.CharField(label=Q_WELLNESS, disabled=True)
     wellness_amount = forms.CharField(label=Q_WELLNESS_AMOUNT, disabled=True)
     detraining_amount = forms.CharField(label=Q_DETRAINING_AMOUNT, disabled=True)
     detraining_days = forms.CharField(label=Q_DETRAINING_DAYS, disabled=True)
-    warmup_id = forms.CharField(label=Q_WARMUP)
+    warmup_id = forms.CharField(label=Q_WARMUP, disabled=True)
     warmup_time = forms.CharField(label=Q_WARMUP_TIME, disabled=True)
 
     def __init__(self, response):
@@ -103,24 +103,24 @@ class ShowFormResponse(forms.Form):
         self['training_amount'].field.initial = response.training_amount
         self['km_amount'].field.initial = response.km_amount
         self['speed_training_amount'].field.initial = response.speed_training_amount
-        self['minute_per_km_speed_training_id'].field.initial = response.minute_per_km_speed_training_id
+        self['minute_per_km_speed_training_id'].field.initial = get_training_timing_description_by_id(response.minute_per_km_speed_training_id)
         self['threshold_training_amount'].field.initial = response.threshold_training_amount
-        self['minute_per_km_threshold_training_id'].field.initial = response.minute_per_km_threshold_training_id
+        self['minute_per_km_threshold_training_id'].field.initial = get_training_timing_description_by_id(response.minute_per_km_threshold_training_id)
         self['interval_training_amount'].field.initial = response.interval_training_amount
-        self['minute_per_km_interval_training_id'].field.initial = response.minute_per_km_interval_training_id
+        self['minute_per_km_interval_training_id'].field.initial = get_training_timing_description_by_id(response.minute_per_km_interval_training_id)
         self['run_up_training_amount'].field.initial = response.run_up_training_amount
-        self['minute_per_km_run_up_training_id'].field.initial = response.minute_per_km_run_up_training_id
+        self['minute_per_km_run_up_training_id'].field.initial = get_training_timing_description_by_id(response.minute_per_km_run_up_training_id)
         self['runway_amount'].field.initial = response.runway_amount
         self['km_per_runway'].field.initial = response.km_per_runway
-        self['minute_per_km_runway_id'].field.initial = response.minute_per_km_runway_id
-        self['other_trainings'].field.initial = response.other_trainings
+        self['minute_per_km_runway_id'].field.initial = get_training_timing_description_by_id(response.minute_per_km_runway_id)
+        self['other_trainings'].field.initial = 'Tak' if response.other_trainings else 'Nie'
         self['other_trainings_amount'].field.initial = response.other_trainings_amount
         self['other_trainings_time'].field.initial = response.other_trainings_time
-        self['wellness'].field.initial = response.wellness
+        self['wellness'].field.initial = 'Tak' if response.wellness else 'Nie'
         self['wellness_amount'].field.initial = response.wellness_amount
         self['detraining_amount'].field.initial = response.detraining_amount
         self['detraining_days'].field.initial = response.detraining_days
-        self['warmup_id'].field.initial = response.warmup_id
+        self['warmup_id'].field.initial = get_warmup_freq_description_by_id(response.warmup_id)
         self['warmup_time'].field.initial = response.warmup_time
 
 

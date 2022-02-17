@@ -59,8 +59,8 @@ def training(request, training_id):
     training_obj = get_object_or_404(Training, pk=training_id)
     context_args.append(training_obj)
 
-    show_trainin_form = ShowTrainingForm(training_obj)
-    context_args.append(show_trainin_form)
+    show_training_form = ShowTrainingForm(training_obj)
+    context_args.append(show_training_form)
 
     context = create_response_context(*context_args)
 
@@ -148,9 +148,15 @@ def form_responses(request):
 
 
 def response(request, form_response_id):
-    response_obj = get_object_or_404(FormResponse, pk=form_response_id)
+    context_args = []
 
-    context = create_response_context(response_obj)
+    response_obj = get_object_or_404(FormResponse, pk=form_response_id)
+    context_args.append(response_obj)
+
+    show_form_response = ShowFormResponse(response_obj)
+    context_args.append(show_form_response)
+
+    context = create_response_context(*context_args)
 
     return render(request, 'admin/form_response.html', context)
 
