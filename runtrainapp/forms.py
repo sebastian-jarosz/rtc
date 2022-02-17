@@ -34,6 +34,26 @@ class AddTrainingForm(forms.Form):
             self['user'].field.disabled = False
 
 
+class ShowTrainingForm(forms.Form):
+    id = forms.CharField(label="ID", disabled=True)
+    user = forms.CharField(label='Użytkownik', disabled=True)
+    type = forms.CharField(label='Typ treningu', disabled=True)
+    start_date = forms.CharField(label="Czas rozpoczęcia", disabled=True)
+    time = forms.CharField(label='Długość treningu (w minutach)', disabled=True)
+    provider = forms.CharField(label='Sposób dodania', disabled=True)
+    external_code = forms.CharField(label='Zewnętrzne ID', disabled=True)
+
+    def __init__(self, training):
+        super().__init__()
+        self['id'].field.initial = training.id
+        self['user'].field.initial = training.user
+        self['type'].field.initial = training.type
+        self['start_date'].field.initial = training.get_formatted_start_date()
+        self['time'].field.initial = training.get_formatted_time()
+        self['provider'].field.initial = training.provider
+        self['external_code'].field.initial = training.external_code
+
+
 class AddRunningTrainingForm(forms.Form):
     # Training part
     start_date = forms.DateTimeField(initial=get_current_date_time, label="Czas rozpoczęcia")

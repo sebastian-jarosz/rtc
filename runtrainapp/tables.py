@@ -5,6 +5,7 @@ from .models import *
 
 
 class TrainingTable(tables.Table):
+    id = tables.LinkColumn('training', args=[A('id')])
     user = tables.Column(verbose_name="Użytkownik")
     type = tables.Column(verbose_name="Typ")
     start_date = tables.TemplateColumn('{{ record.get_formatted_start_date }}', verbose_name="Czas rozpoczęcia")

@@ -46,7 +46,8 @@ CONTEXT_FORM_RESPONSE = 'form_response'
 CONTEXT_FORM_USER = 'form_user'
 CONTEXT_ADD_TRAINING_FORM = 'add_training_form'
 CONTEXT_ADD_RUNNING_TRAINING_FORM = 'add_running_training_form'
-CONTEXT_ADD_GENERATE_TRAINING_FORM = 'generate_training_form'
+CONTEXT_GENERATE_TRAINING_FORM = 'generate_training_form'
+CONTEXT_SHOW_TRAINING_FORM = 'show_training_form'
 CONTEXT_EXCEPTION = 'exception'
 
 # model file names

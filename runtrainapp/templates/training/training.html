@@ -1,13 +1,18 @@
 {% extends 'base_template.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
-Training {{ training.id }} - Running Training Comrade
+Trening {{ training.id }} - RunningGenerator
 {% endblock title %}
 
 {% block body_data %}
-
 <div class="page-hero d-flex align-items-center justify-content-center">
-    <h1>{{ training }}</h1>
+    <h1>Trening {{ training.id }}</h1>
+</div>
+<div class="page-hero d-flex align-items-center justify-content-center">
+    <form action="" method="get" id="showTrainingForm">
+        {{ show_training_form|crispy }}
+    </form>
 </div>
 
 {% endblock body_data %}

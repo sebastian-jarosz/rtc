@@ -54,9 +54,15 @@ def list_all_user_trainings(request):
 
 # Show specified training
 def training(request, training_id):
-    training_obj = get_object_or_404(Training, pk=training_id)
+    context_args = []
 
-    context = create_response_context(training_obj)
+    training_obj = get_object_or_404(Training, pk=training_id)
+    context_args.append(training_obj)
+
+    show_trainin_form = ShowTrainingForm(training_obj)
+    context_args.append(show_trainin_form)
+
+    context = create_response_context(*context_args)
 
     return render(request, 'training/training.html', context)
 
