@@ -50,9 +50,18 @@ class FormResponsesTable(tables.Table):
 class GeneratedResultInputTable(tables.Table):
     # No name for this column
     dsc = tables.Column(verbose_name="", orderable=False)
-    main = tables.Column(verbose_name="Obecne treningi", orderable=False)
-    first = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~10%", orderable=False)
-    second = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~30%", orderable=False)
+    main = tables.Column(verbose_name="Obecne treningi", orderable=False, attrs={
+        "th": {"class": "bg-warning"},
+        "td": {"class": "table-warning"}
+    })
+    first = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~10%", orderable=False, attrs={
+        "th": {"class": "bg-primary"},
+        "td": {"class": "table-primary"}
+    })
+    second = tables.Column(verbose_name="Propozycja poprawnienia treningów o ~30%", orderable=False, attrs={
+        "th": {"class": "bg-success"},
+        "td": {"class": "table-success"}
+    })
 
     class Meta:
         template_name = "tables/responsive-table.html"
@@ -61,9 +70,18 @@ class GeneratedResultInputTable(tables.Table):
 class GeneratedResultOutputTable(tables.Table):
     # No name for this column
     dsc = tables.Column(verbose_name="", orderable=False)
-    main = tables.Column(verbose_name="Obecne rezultaty", orderable=False)
-    first = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~10%", orderable=False)
-    second = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~30%", orderable=False)
+    main = tables.Column(verbose_name="Obecne rezultaty", orderable=False, attrs={
+        "th": {"class": "bg-warning"},
+        "td": {"class": "table-warning"}
+    })
+    first = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~10%", orderable=False, attrs={
+        "th": {"class": "bg-primary"},
+        "td": {"class": "table-primary"}
+    })
+    second = tables.Column(verbose_name="Rezultaty po poprawieniu treningów o ~30%", orderable=False, attrs={
+        "th": {"class": "bg-success"},
+        "td": {"class": "table-success"}
+    })
 
     class Meta:
         template_name = "tables/responsive-table.html"
