@@ -28,6 +28,7 @@ class CustomLoginForm(LoginForm):
         self.fields['login'].widget.attrs['placeholder'] = "Login"
         self.fields['password'].label = "Hasło"
         self.fields['password'].widget.attrs['placeholder'] = "Hasło"
+        self.fields['remember'].label = "Zapamiętaj mnie"
 
 
 # Custom Signup Form
