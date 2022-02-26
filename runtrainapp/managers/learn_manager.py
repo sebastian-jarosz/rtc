@@ -336,20 +336,20 @@ def visualise_knr_model_by_dict(knr_model_dict, knr_model_name, save_model=True)
     break_line()
 
     # Print summary of KNeighborsRegressor
-    summary_lr_model_by_dict(knr_model_dict)
+    summary_knr_model_by_dict(knr_model_dict)
 
     print('Visualisation ' + str(knr_model_name))
     break_line()
 
     show_and_save_knr_pred_plot(knr_model_dict, knr_model_name)
-    show_and_save_lr_conf_matrix(knr_model_dict, knr_model_name)
+    show_and_save_knr_conf_matrix(knr_model_dict, knr_model_name)
 
     if save_model:
         save_model_from_dict(knr_model_dict, knr_model_name)
 
 
 # Print KNeighborsRegressor summary
-def summary_lr_model_by_dict(knr_model_dict):
+def summary_knr_model_by_dict(knr_model_dict):
     print('Model summary')
     break_line()
 
